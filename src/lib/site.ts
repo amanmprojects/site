@@ -19,8 +19,8 @@ export const site = {
   email: null as string | null,
   socials: {
     github: "https://github.com/amanmprojects",
-    twitter: null as string | null,
-    linkedin: null as string | null,
+    twitter: "https://x.com/Amanm10000",
+    linkedin: "https://www.linkedin.com/in/aman-mehtar",
   },
   githubUsername: "amanmprojects",
   story: [
@@ -75,9 +75,7 @@ export const site = {
       ],
     },
   ] as StoryItem[],
-  // Add posts here when you're ready:
-  // { title: "...", date: "Mon YYYY", href: "/writing/slug", excerpt: "..." }
-  writing: [] as WritingPost[],
+  // Writing posts live in content/writing/*.md — see src/lib/posts.ts
   projects: [
     {
       name: "Phish",
@@ -133,13 +131,6 @@ export const site = {
 export type StoryItem = {
   text: string;
   links?: { label: string; href: string }[];
-};
-
-export type WritingPost = {
-  title: string;
-  date: string;
-  href: string;
-  excerpt: string;
 };
 
 export type Project = (typeof site.projects)[number];

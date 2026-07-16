@@ -8,11 +8,11 @@ A personal portfolio inspired by [dhravya.dev](https://dhravya.dev/), built with
 - Sticky sidebar nav (bottom bar on mobile): Home · Writing · Stuff · Guestbook
 - Gradient headline, dotted bio links, animated underlines
 - Custom cursor on fine-pointer devices
-- Writing list + individual post pages
+- Writing from Markdown files (`content/writing/`)
 - Projects (“Stuff”) page
 - Guestbook (localStorage demo)
 - GitHub contribution graph
-- Single config file for all content
+- Single config file for site identity + projects
 
 ## Getting started
 
@@ -26,7 +26,9 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ## Customize
 
-Edit **`src/lib/site.ts`** — name, bio, socials, story bullets, writing, and projects all live there.
+### Site identity & projects
+
+Edit **`src/lib/site.ts`** — name, bio, socials, story bullets, and projects live there.
 
 | Field | What it controls |
 |--------|------------------|
@@ -36,8 +38,37 @@ Edit **`src/lib/site.ts`** — name, bio, socials, story bullets, writing, and p
 | `socials`, `email` | Social icons & mailto |
 | `githubUsername` | Contribution graph |
 | `story` | Bullet list on the home page |
-| `writing` | Posts (home preview + `/writing`) |
 | `projects` | Stuff list |
+
+### Writing posts
+
+Posts are Markdown files in **`content/writing/`**.
+
+1. Copy `_template.md` (or create a new `.md` file).
+2. Name it with the URL slug you want, e.g. `my-first-post.md` → `/writing/my-first-post`.
+3. Fill in frontmatter and write the body in Markdown.
+
+```md
+---
+title: "My first post"
+date: "2026-07-16"
+excerpt: "One-line teaser for the list and home page."
+# draft: true
+---
+
+Your post body in **Markdown**.
+```
+
+| Frontmatter | Required | Notes |
+|-------------|----------|--------|
+| `title` | yes | Post title |
+| `date` | yes | ISO date (`YYYY-MM-DD`) for sorting |
+| `excerpt` | no | List teaser; falls back to the first ~160 chars |
+| `draft` | no | If `true`, hidden in production (still shown in dev) |
+
+- Files starting with `_` (like `_template.md`) are ignored.
+- Posts are sorted newest-first automatically.
+- Loader lives in `src/lib/posts.ts`.
 
 Update links in `src/components/SocialLinks.tsx` only if you add new platforms.
 
@@ -56,6 +87,7 @@ npm run lint     # eslint
 - React 19
 - Tailwind CSS 4
 - TypeScript
+- gray-matter + marked (writing)
 
 ## Deploy
 

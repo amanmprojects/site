@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Content, SectionHeading } from "@/components/Content";
 import { SocialLinks } from "@/components/SocialLinks";
+import { getAllPosts } from "@/lib/posts";
 import { site, type StoryItem } from "@/lib/site";
 
 function StoryLine({ item }: { item: StoryItem }) {
@@ -39,7 +40,7 @@ function StoryLine({ item }: { item: StoryItem }) {
 }
 
 export default function Home() {
-  const previewWriting = site.writing.slice(0, 5);
+  const previewWriting = getAllPosts().slice(0, 5);
   const previewProjects = site.projects.slice(0, 4);
 
   return (
