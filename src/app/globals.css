@@ -95,16 +95,28 @@ body.grain::before {
   background-size: 100% 1.5px;
 }
 
-/* Custom cursor ring — sidebar only */
+/* Custom cursor — dhravya.dev style (arrow site-wide, ring on sidebar items) */
 .cursor-dot {
   z-index: 80;
   pointer-events: none;
   will-change: transform;
-  transition: opacity 0.2s;
+  transition: opacity 0.3s;
   position: fixed;
   top: 0;
   left: 0;
+}
+
+.cursor-arrow {
+  display: block;
+  transform-origin: 0 0;
+  transition:
+    transform 0.2s,
+    opacity 0.2s;
+}
+
+.cursor-dot.is-link .cursor-arrow {
   opacity: 0;
+  transform: scale(0.4);
 }
 
 .cursor-ring {
@@ -117,22 +129,40 @@ body.grain::before {
   position: absolute;
   top: 0;
   left: 0;
+  opacity: 0;
+  transform: scale(0.2);
   transition:
-    transform 0.15s ease,
-    background 0.15s ease;
+    transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1),
+    opacity 0.2s;
 }
 
 .cursor-dot.is-link .cursor-ring {
-  transform: scale(1.35);
-  background: rgba(47, 107, 255, 0.2);
+  opacity: 1;
+  transform: scale(1);
+  animation: cursor-pulse 1.6s ease-in-out infinite;
 }
 
-/* Hide system cursor only while hovering the sidebar */
+@keyframes cursor-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-blue) 35%, transparent);
+  }
+  50% {
+    box-shadow: 0 0 0 6px transparent;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cursor-dot.is-link .cursor-ring {
+    animation: none;
+  }
+}
+
+/* Hide native cursor while custom cursor is active */
 @media (pointer: fine) {
-  #site-sidebar.sidebar-cursor-active,
-  #site-sidebar.sidebar-cursor-active a,
-  #site-sidebar.sidebar-cursor-active button {
-    cursor: none;
+  body.live-cursor,
+  body.live-cursor * {
+    cursor: none !important;
   }
 }
 

@@ -103,6 +103,7 @@ export function Sidebar() {
             <Link
               key={item.href}
               href={item.href}
+              data-sidebar-item
               aria-current={active ? "page" : undefined}
               className={`group flex items-center gap-3 rounded-lg px-2 py-2 transition-[color,background-color,transform] duration-150 active:scale-[0.96] md:w-full md:justify-between md:py-2.5 ${
                 active
