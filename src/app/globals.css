@@ -1,0 +1,143 @@
+@import "tailwindcss";
+
+@theme {
+  --color-paper: #fbfbf9;
+  --color-ink: #15171c;
+  --color-mute: #6b7280;
+  --color-line: #ececea;
+  --color-blue: #2f6bff;
+  --color-green: #18a058;
+  --font-sans: var(--font-hanken), ui-sans-serif, system-ui, sans-serif;
+}
+
+@keyframes grad-pan {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+/* Subtle paper grain */
+body.grain::before {
+  content: "";
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 180px 180px;
+}
+
+/* Gradient text like dhravya.dev */
+.grad {
+  color: transparent;
+  background-image: linear-gradient(100deg, #2f6bff, #7c5cff, #2f6bff);
+  background-size: 200%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: grad-pan 7s linear infinite;
+}
+
+/* Dotted underline links (story / bio) */
+.lnk {
+  color: var(--color-ink);
+  text-decoration: none;
+  background-image: repeating-linear-gradient(
+    -60deg,
+    rgba(21, 23, 28, 0.55) 0 1px,
+    transparent 1px 4px
+  );
+  background-position: 0 100%;
+  background-repeat: repeat-x;
+  background-size: 100% 1px;
+  transition: color 0.15s ease, background-image 0.15s ease;
+}
+
+.lnk:hover {
+  color: var(--color-blue);
+  background-image: repeating-linear-gradient(
+    -60deg,
+    rgba(47, 107, 255, 0.7) 0 1px,
+    transparent 1px 4px
+  );
+}
+
+/* Animated underline links (nav / lists) */
+.u {
+  text-decoration: none;
+  background-image: linear-gradient(var(--color-blue), var(--color-blue));
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  background-size: 0% 1.5px;
+  transition:
+    background-size 0.2s ease,
+    color 0.2s ease;
+}
+
+.u:hover {
+  color: var(--color-blue);
+  background-size: 100% 1.5px;
+}
+
+/* Custom cursor ring — sidebar only */
+.cursor-dot {
+  z-index: 80;
+  pointer-events: none;
+  will-change: transform;
+  transition: opacity 0.2s;
+  position: fixed;
+  top: 0;
+  left: 0;
+  opacity: 0;
+}
+
+.cursor-ring {
+  border: 1.5px solid var(--color-blue);
+  background: rgba(47, 107, 255, 0.12);
+  border-radius: 9999px;
+  width: 38px;
+  height: 38px;
+  margin: -19px 0 0 -19px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition:
+    transform 0.15s ease,
+    background 0.15s ease;
+}
+
+.cursor-dot.is-link .cursor-ring {
+  transform: scale(1.35);
+  background: rgba(47, 107, 255, 0.2);
+}
+
+/* Hide system cursor only while hovering the sidebar */
+@media (pointer: fine) {
+  #site-sidebar.sidebar-cursor-active,
+  #site-sidebar.sidebar-cursor-active a,
+  #site-sidebar.sidebar-cursor-active button {
+    cursor: none;
+  }
+}
+
+/* Selection */
+::selection {
+  background: rgba(47, 107, 255, 0.18);
+  color: var(--color-ink);
+}
