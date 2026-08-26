@@ -18,7 +18,7 @@ const seed: Entry[] = [
   {
     id: "seed-1",
     name: "Alex",
-    message: "Tidy site. Love the paper aesthetic.",
+    message: "Clean site. Love the paper aesthetic.",
     createdAt: "2026-03-12T10:00:00.000Z",
   },
   {
