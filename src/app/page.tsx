@@ -151,9 +151,6 @@ export default function Home() {
       </section>
 
       <footer className="mt-16 flex flex-wrap gap-x-5 gap-y-2 text-sm text-mute">
-        <Link href="/guestbook" className="u">
-          Sign my guestbook
-        </Link>
         <a
           href={site.socials.github}
           target="_blank"

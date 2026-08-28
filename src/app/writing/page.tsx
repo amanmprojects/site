@@ -7,6 +7,19 @@ import { site } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Writing",
   description: `Writing by ${site.name}`,
+  alternates: { canonical: "/writing" },
+  openGraph: {
+    title: `Writing · ${site.name}`,
+    description: `Writing by ${site.name}`,
+    url: "/writing",
+    images: [{ url: "/opengraph-image", alt: `${site.name} portfolio` }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `Writing · ${site.name}`,
+    description: `Writing by ${site.name}`,
+    images: ["/opengraph-image"],
+  },
 };
 
 function groupByYear(posts: PostMeta[]) {
@@ -24,7 +37,11 @@ function groupByYear(posts: PostMeta[]) {
 function formatListDate(iso: string) {
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return iso;
-  return d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+  return d.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    timeZone: "UTC",
+  });
 }
 
 export default function WritingPage() {

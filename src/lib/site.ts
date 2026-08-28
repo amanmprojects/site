@@ -1,6 +1,7 @@
 export const site = {
   name: "Aman Mehtar",
   title: "Aman Mehtar",
+  url: "https://site-mauve-seven-85.vercel.app",
   description:
     "Engineering student in Artificial Intelligence & Data Science. Building agents, tools, and full-stack products.",
   headline: {
@@ -36,7 +37,7 @@ export const site = {
       text: "Shipped a real-time chat app with rooms, DMs, OAuth, and presence.",
       links: [
         {
-          label: "chat-app",
+          label: "chat app",
           href: "https://github.com/amanmprojects/chat-app",
         },
       ],
@@ -66,7 +67,7 @@ export const site = {
       ],
     },
     {
-      text: "58+ public repos and counting — always shipping something.",
+      text: "82+ public repos on GitHub and counting — always shipping something.",
       links: [
         {
           label: "GitHub",
@@ -77,6 +78,54 @@ export const site = {
   ] as StoryItem[],
   // Writing posts live in content/writing/*.md — see src/lib/posts.ts
   projects: [
+    {
+      name: "quick-gateway",
+      description:
+        "Self-hosted LiteLLM gateway that translates OpenAI Responses and Anthropic Messages requests for OpenCode Zen models, including tool calls.",
+      href: "https://github.com/amanmprojects/quick-gateway",
+    },
+    {
+      name: "Skiller",
+      description:
+        "Terminal picker for fuzzy-searching skills.sh, previewing skills, and installing them locally or globally from any project.",
+      href: "https://github.com/amanmprojects/skiller",
+    },
+    {
+      name: "Files",
+      description:
+        "Native Linux file explorer built with TypeScript and Vercel Native SDK, compiled ahead of time with no browser or JavaScript runtime.",
+      href: "https://github.com/amanmprojects/explorer",
+    },
+    {
+      name: "WisprFlow for Linux",
+      description:
+        "Hold-to-dictate Linux daemon using whisper.cpp, CUDA, evdev hotkeys, and native Wayland text insertion.",
+      href: "https://github.com/amanmprojects/wispr-flow",
+    },
+    {
+      name: "Disk Agent",
+      description:
+        "Personal AI agent on the Pi SDK with Telegram and CLI chat, persistent memory, cron automations, and browser tools.",
+      href: "https://github.com/amanmprojects/disk-agent",
+    },
+    {
+      name: "Chess Bot",
+      description:
+        "Browser chess against a PyTorch transformer ported to dependency-free JavaScript, with static model inference in a Web Worker.",
+      href: "https://github.com/amanmprojects/chess-bot-vercel",
+    },
+    {
+      name: "Luna Eye",
+      description:
+        "Pi extension that gives text-only models vision through a configurable eye model, with image caching and context-safe fallbacks.",
+      href: "https://github.com/amanmprojects/lunaeye",
+    },
+    {
+      name: "llm-bench",
+      description:
+        "OpenTUI benchmark for LLM endpoints covering TTFT, throughput, prompt caching, tool latency, token usage, and cost.",
+      href: "https://github.com/amanmprojects/llm-endpoint-bench",
+    },
     {
       name: "Phish",
       description:

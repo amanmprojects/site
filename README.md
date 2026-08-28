@@ -5,12 +5,11 @@ A personal portfolio inspired by [dhravya.dev](https://dhravya.dev/), built with
 ## Features
 
 - Clean paper aesthetic with Hanken Grotesk, blue accent, and subtle grain
-- Sticky sidebar nav (bottom bar on mobile): Home · Writing · Stuff · Guestbook
+- Sticky sidebar nav (bottom bar on mobile): Home · Writing · Stuff
 - Gradient headline, dotted bio links, animated underlines
 - Custom cursor on fine-pointer devices
 - Writing from Markdown files (`content/writing/`)
 - Projects (“Stuff”) page
-- Guestbook (localStorage demo)
 - GitHub contribution graph
 - Single config file for site identity + projects
 
@@ -32,7 +31,7 @@ Edit **`src/lib/site.ts`** — name, bio, socials, story bullets, and projects l
 
 | Field | What it controls |
 |--------|------------------|
-| `name`, `title`, `description` | Site identity & SEO |
+| `name`, `title`, `url`, `description` | Site identity & SEO |
 | `headline` | Gradient hero line |
 | `bio` | Intro paragraph |
 | `socials`, `email` | Social icons & mailto |
@@ -78,7 +77,9 @@ Update links in `src/components/SocialLinks.tsx` only if you add new platforms.
 npm run dev      # development
 npm run build    # production build
 npm run start    # serve production build
-npm run lint     # eslint
+npm run lint       # eslint
+npm run test       # unit tests
+npm run test:e2e   # browser smoke tests
 ```
 
 ## Stack
@@ -87,7 +88,8 @@ npm run lint     # eslint
 - React 19
 - Tailwind CSS 4
 - TypeScript
-- gray-matter + marked (writing)
+- gray-matter + marked + sanitize-html (writing)
+- Vitest + Playwright (tests)
 
 ## Deploy
 

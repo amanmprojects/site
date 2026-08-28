@@ -6,6 +6,19 @@ import { site } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Stuff",
   description: `Projects and experiments by ${site.name}`,
+  alternates: { canonical: "/stuff" },
+  openGraph: {
+    title: `Stuff · ${site.name}`,
+    description: `Projects and experiments by ${site.name}`,
+    url: "/stuff",
+    images: [{ url: "/opengraph-image", alt: `${site.name} portfolio` }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `Stuff · ${site.name}`,
+    description: `Projects and experiments by ${site.name}`,
+    images: ["/opengraph-image"],
+  },
 };
 
 export default function StuffPage() {
