@@ -34,6 +34,15 @@ export const site = {
       links: [],
     },
     {
+      text: "Trained a 101M-param LLM from scratch on a laptop GPU, then a 94M chess model that learned the board from move text alone.",
+      links: [
+        {
+          label: "94M chess model",
+          href: "https://github.com/amanmprojects/llm",
+        },
+      ],
+    },
+    {
       text: "Shipped a real-time chat app with rooms, DMs, OAuth, and presence.",
       links: [
         {
@@ -111,8 +120,14 @@ export const site = {
     {
       name: "Chess Bot",
       description:
-        "Browser chess against a PyTorch transformer ported to dependency-free JavaScript, with static model inference in a Web Worker.",
-      href: "https://github.com/amanmprojects/chess-bot-vercel",
+        "Play a 5.58M-param policy transformer in your browser — PyTorch ported to dependency-free JavaScript, fp16 weights, inference in a Web Worker, no server.",
+      href: "https://chess-bot-vercel.vercel.app",
+    },
+    {
+      name: "miniLLM + chessLLM",
+      description:
+        "A 101M language model trained from scratch on one 8GB laptop GPU, and a 94M chess model that builds an internal board — linearly probeable at 85.6% — from move text alone.",
+      href: "https://github.com/amanmprojects/llm",
     },
     {
       name: "Luna Eye",
