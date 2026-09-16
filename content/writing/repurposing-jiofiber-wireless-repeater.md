@@ -8,7 +8,7 @@ I had a decommissioned JioFiber **JCOW411** ONT/gateway sitting on my desk. It�
 
 I don't have Jio fiber service on this box anymore, but I needed a **wireless range extender** for a back room: 5 GHz backhaul to my main router, 2.4 GHz for client devices, transparently bridged on the same subnet so roaming works without double-NAT.
 
-I set an autonomous coding agent loose on the router. It got root in under five minutes. Then it spent hours poking around the kernel, drivers, and wireless stack, finally returning with a definitive 200-line markdown postmortem:
+I set an autonomous coding agent loose on the router — specifically **DeepSeek V4.1 (flash model) running through Claude Code**. It got root in under five minutes. Then it spent hours poking around the kernel, drivers, and wireless stack, finally returning with a definitive 200-line markdown postmortem:
 
 > *"Not achievable on this hardware. The chipset is Broadcom fullmac (`dhd`/`wl`), not mac80211... The WPA supplicant path is compiled out... Even rewriting the kernel cannot help."*
 
@@ -16,7 +16,7 @@ It sounded thorough, authoritative, and totally logical.
 
 It was also completely wrong.
 
-Here is the story of how an AI constructed an ironclad proof of impossibility around a single misinterpreted error code, and how Broadcom’s vintage features turned the locked ISP box into a gigabit wireless bridge.
+Here is the story of how an AI constructed an ironclad proof of impossibility around a single misinterpreted error code, how a second model cracked it wide open with vintage Broadcom SDK knowledge, and how Broadcom’s vintage features turned the locked ISP box into a gigabit wireless bridge.
 
 ---
 
@@ -28,7 +28,7 @@ Older community guides for Jio gateways rely on downloading an encrypted configu
 
 On modern firmware (`ARCNTF1_JCOW411_R3.16`, built March 2026), that path is dead. The encryption key is randomly generated per-device on first boot (`/flash/secure/key.txt`), combining the serial number with 32 random hex characters.
 
-Instead, root was gained via an unauthenticated-style command injection hiding in the gateway's EasyMesh management API (`meshApi.cgi`). Splicing shell commands into the `Threshold_Val` JSON parameter executes directly in a root subshell:
+Instead, root was gained via an EasyMesh management API command injection (`meshApi.cgi`), referencing the technique documented by [Naitik1208/JF-ROUTER](https://github.com/Naitik1208/JF-ROUTER) on GitHub. Splicing shell commands into the `Threshold_Val` JSON parameter executes directly in a root subshell:
 
 ```http
 POST /meshApi.cgi?meshApi=1&meshRequest=SET_CGI HTTP/1.1
@@ -97,7 +97,7 @@ It then inspected the kernel modules in `/lib/modules/4.1.52/`:
 ```
 Out of 70 kernel modules, there was **no `mac80211.ko`** and **no `brcmfmac.ko`**. The only wireless driver was Broadcom’s closed-source fullmac binary blob.
 
-The agent synthesized this evidence into a clean syllogism:
+The agent (DeepSeek V4.1 Flash) synthesized this evidence into a clean syllogism:
 1. `nl80211 CONNECT` fails at the kernel boundary with `-E2BIG` (rejection of connection attributes).
 2. Broadcom's vendor tool rejects `sup_wpa 1` with `Not STA`.
 3. The kernel has no `mac80211`, so standard open-source drivers cannot be substituted.
@@ -109,11 +109,11 @@ Except for one detail.
 
 ---
 
-## Act 3: Error Code `-7` Wasn't What It Looked Like
+## Act 3: Enter Gemini 3.8 Flash — Error `-7` Wasn't What It Looked Like
 
-When I inspected the disassembled kernel modules (`dhd.ko` and `wl.ko`), something smelled off. Neither module contained any code returning `E2BIG` on connection attempts.
+I handed the project and logs over to a second model — **Gemini 3.8 Flash** via Antigravity.
 
-Why did the kernel return `-7`?
+Gemini immediately flagged something that DeepSeek had missed. Why did the kernel return `-7`?
 
 Because Broadcom drivers don't speak Linux errnos when talking to their hardware dongle. Broadcom’s SDK uses its own proprietary error enumeration (`include/bcmutils.h`):
 
@@ -342,17 +342,34 @@ $ ping google.com
 
 Scanning Wi-Fi from client devices shows the 2.4 GHz AP (`Jio5G-Hathway`) beaconing at 100% signal strength. Connecting to it yields a seamless DHCP lease from the upstream router, zero double-NAT, and full throughput across the 80 MHz 5 GHz backhaul.
 
+### Bonus: Wireless Telnet and the Firewall Trap
+
+Once the router was unplugged from Ethernet and moved across the house into its repeater position, one final quirk appeared: attempting to telnet into `192.168.1.250` wirelessly timed out. Web management on port 80 worked fine, and ping times were under 2 ms, but port 23 was filtered.
+
+Inspecting iptables on the router revealed why:
+```
+Chain fwInBypass:
+ACCEPT  tcp -- * * 0.0.0.0/0 0.0.0.0/0 tcp dpt:23 src-group 0x1/0x1
+```
+The gateway's TeamF1 firewall restricted inbound telnet specifically to `ifgroup 0x1/0x1` — the physical wired Ethernet ports. Connections from wireless client VAPs (`wl0.2`) were dropped.
+
+Poking a bypass rule unlocked wireless administration:
+```bash
+/pfrm2.0/bin/iptables -I fwInBypass 1 -p tcp --dport 23 -j ACCEPT
+```
+We baked this rule directly into `/etc/init.d/repeater` and `/flash/jf_repeater.sh` so wireless root access is always available immediately after boot.
+
 ---
 
 ## Reflections: When AI Debugging Hits Abstraction Leaks
 
-This was a fascinating failure mode for an autonomous agent.
+This was a fascinating real-world benchmark of autonomous agents tackling embedded systems.
 
-The AI didn't hallucinate or get lazy. It followed an exemplary scientific process: formed hypotheses, executed experiments, inspected logs, escalated debugging flags, analyzed kernel modules, and documented every dead end.
+**DeepSeek V4.1 Flash** (running in Claude Code) was extraordinarily thorough: it gained root in minutes, automated test scripts, collected kernel logs, and methodically tested options. It didn't hallucinate or get lazy. But it fell victim to an **abstraction leak**:
+1. It trusted `strerror(7)` without realizing that Broadcom's kernel driver ioctl returns negative vendor error codes that pass through userland untranslated.
+2. It treated `Argument list too long` as ground truth, poisoning its entire hypothesis tree.
+3. Every subsequent failure (`sup_wpa`, `set_pmk`, `mac80211` checks) seemed to confirm the false premise that station mode was compiled out.
 
-Its undoing was an **abstraction leak**:
-1. It trusted `strerror(7)` without realizing that kernel driver ioctls can return negative vendor error codes that pass through userland untranslated.
-2. It treated `Argument list too long` as ground truth about what the driver rejected, which steered its entire hypothesis space away from radio mode settings.
-3. Once the premise was poisoned, every subsequent test (`sup_wpa`, `set_pmk`, `mac80211` checks) seemed to confirm the false theory that the driver was crippled.
+**Gemini 3.8 Flash** (running in Antigravity) brought the broader domain knowledge needed to break out of the loop. Having extensive pre-training on embedded networking and vendor SDKs, Gemini recognized that `-7` was Broadcom's `#define BCME_NOTSTA -7` (`Not a Station`), realized the radio was simply in AP mode (`ap 1`), and reached for vintage Broadcom WET mode (`wl wet 1`) to bridge Layer 2 without double-NAT.
 
-When you're dealing with vintage embedded Linux and proprietary vendor blobs, standard Linux conventions don't always apply. Sometimes an error that looks like a missing feature is just an un-flipped bit from 2004 waiting for `ap 0`.
+It’s a clear demonstration of where AI models are today: rigorous logical deduction gets an agent very far, but domain-specific ground truth is what ultimately separates an "impossible" verdict from a working solution.
