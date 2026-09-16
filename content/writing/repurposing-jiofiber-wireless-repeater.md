@@ -373,3 +373,17 @@ This was a fascinating real-world benchmark of autonomous agents tackling embedd
 **Gemini 3.8 Flash** (running in Antigravity) brought the broader domain knowledge needed to break out of the loop. Having extensive pre-training on embedded networking and vendor SDKs, Gemini recognized that `-7` was Broadcom's `#define BCME_NOTSTA -7` (`Not a Station`), realized the radio was simply in AP mode (`ap 1`), and reached for vintage Broadcom WET mode (`wl wet 1`) to bridge Layer 2 without double-NAT.
 
 It’s a clear demonstration of where AI models are today: rigorous logical deduction gets an agent very far, but domain-specific ground truth is what ultimately separates an "impossible" verdict from a working solution.
+
+---
+
+## Repositories & Resources
+
+The complete repeater daemon, init service, and one-click installer are open-sourced for the community:
+
+- **GitHub Repository:** [**amanmprojects/jcow411-repeater**](https://github.com/amanmprojects/jcow411-repeater)
+- **Direct Installer (run inside router shell):**
+  ```sh
+  /pfrm2.0/bin/curl -sSL https://raw.githubusercontent.com/amanmprojects/jcow411-repeater/main/install.sh | sh -s -- "YOUR_SSID" "YOUR_PASSWORD"
+  ```
+- **Root Exploit Reference:** [Naitik1208/JF-ROUTER](https://github.com/Naitik1208/JF-ROUTER)
+
