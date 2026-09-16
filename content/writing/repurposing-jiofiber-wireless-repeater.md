@@ -359,9 +359,49 @@ Poking a bypass rule unlocked wireless administration:
 ```
 We baked this rule directly into `/etc/init.d/repeater` and `/flash/jf_repeater.sh` so wireless root access is always available immediately after boot.
 
+### The Cold-Boot "Ghost" and the OpenSync Watchdog Loop
+
+Everything seemed done until the router was power-cycled.
+
+On a fresh cold boot, a bizarre behavior surfaced: the repeater AP SSID would show up for roughly fifteen seconds, allow a client to connect, and then abruptly vanish into thin air. Thirty seconds later, it reappeared, only to drop again in an endless tug of war.
+
+Digging through running processes with `ps` exposed the hidden antagonist:
+```
+PID 1473:  /bin/sh /usr/opensync/scripts/healthcheck.service
+PID 12639: /bin/sh /usr/opensync/bin/restart.sh
+PID 14258: /bin/sh /etc/init.d/opensync start
+```
+
+Jio's firmware integrates Plume OpenSync. In factory operation, OpenSync talks to Plume’s cloud servers. Because the router was now an offline repeater:
+1. `healthcheck.service` repeatedly failed its connectivity tests.
+2. `libopensync.so` triggered `/usr/opensync/bin/restart.sh`.
+3. `restart.sh` executed `/etc/init.d/opensync restart`.
+4. In `/etc/init.d/opensync`, the script issued `wlconf wl0 down; wlconf wl0 up; wlconf wl0 start` and the same for `wl1`.
+
+Every 30 to 60 seconds, OpenSync was completely tearing down the Broadcom radios and resetting them, destroying our station association and killing the client AP!
+
+Compounding the problem, `hostapd` is started at boot with an empty configuration (`hostapd -g /var/run/hostapd/global`), originally relying on OpenSync's `wm` daemon to dynamically add BSS configurations. Without OpenSync, `wl0.2` was never registered to hostapd after reboot.
+
+Finally, an obnoxious vendor alarm script (`/pfrm2.0/bin/script.sh`) was running every 10 seconds, polling for an optical GPON signal. Seeing none, it continually touched `/tmp/gponFailed` and forced the gateway's status LED into a frantic fast-blinking red loop (`/bin/ledctl1 RED fastBlink`).
+
+#### The Final Lockdown
+
+To make the repeater genuinely persistent and "just work" across cold reboots:
+
+1. **Neutered OpenSync Watchdogs**: Replaced `/usr/opensync/bin/restart.sh` and `/etc/init.d/healthcheck` with clean no-op scripts (`exit 0`) and removed `/etc/rc3.d/S991healthcheck`. In `/etc/init.d/opensync`, preserved the Broadcom hardware VIF initialization while permanently disabling the OpenSync manager daemons (`dm`, `start.sh`, `ipmond`, `gwofflinemond`, `ovsmond`).
+2. **Autonomous Hostapd Control**: Equipped `/usr/sbin/jf_repeater` with direct control over hostapd's global socket:
+   ```bash
+   hostapd_cli -p /var/run/hostapd raw "ADD bss_config=wl0:/var/run/hostapd-wl0.2.config"
+   ```
+   If either the backhaul or the AP interface ever drops, the daemon automatically re-associates and recovers the link within 10 seconds.
+3. **Silenced Fiber Alarms & Solid Green LED**: Appended `exit 0` at line 2 of `/pfrm2.0/bin/script.sh` (persisted across boots on read-write UBIFS), and programmed `jf_repeater` to maintain a calm, solid green status LED (`/bin/ledctl green on`).
+
+A full cold reboot confirmed the victory: from power-on, the gateway initializes in under 20 seconds, connects the 5 GHz backhaul, broadcasts the 2.4 GHz AP, bridges all traffic to the LAN, turns solid green, and runs indefinitely with zero drops.
+
 ---
 
 ## Reflections: When AI Debugging Hits Abstraction Leaks
+
 
 This was a fascinating real-world benchmark of autonomous agents tackling embedded systems.
 
