@@ -1,7 +1,7 @@
 export const site = {
   name: "Aman Mehtar",
   title: "Aman Mehtar",
-  url: "https://site-mauve-seven-85.vercel.app",
+  url: "https://aman-on-bits.vercel.app",
   description:
     "Engineering student in Artificial Intelligence & Data Science. Building agents, tools, and full-stack products.",
   headline: {
@@ -87,6 +87,24 @@ export const site = {
   ] as StoryItem[],
   // Writing posts live in content/writing/*.md — see src/lib/posts.ts
   projects: [
+    {
+      name: "jcow411-repeater",
+      description:
+        "Turned a decommissioned JioFiber JCOW411 gateway into a bridged 5 GHz range extender — Layer-2 WET mode, single subnet, no double-NAT, and persistent across reboots.",
+      href: "https://github.com/amanmprojects/jcow411-repeater",
+    },
+    {
+      name: "amzn-ml-2025-pricing",
+      description:
+        "Amazon ML Challenge 2025: 4-bit LoRA on Qwen3.5-2B with a monotone quantile head for SMAPE-optimal product price prediction, trained on one 8 GB laptop GPU.",
+      href: "https://github.com/amanmprojects/amzn-ml-2025-pricing",
+    },
+    {
+      name: "pi-agent-tui",
+      description:
+        "Pi extension that drives TUI applications programmatically through agent-tui, so an agent can read and operate terminal interfaces.",
+      href: "https://github.com/amanmprojects/pi-agent-tui",
+    },
     {
       name: "quick-gateway",
       description:
