@@ -30,7 +30,9 @@ Open weights especially. DeepSeek 4.1 Flash, MiMo v2.6 with its transparent RL r
 
 Then there's the clip of 2005 DHH: "look at all the things I'm not doing." It made me laugh and then made me quiet, because that has quietly become my job description too — not the code I write, the configuration I don't write, the things a small team "couldn't" maintain that now just get built.
 
-And I love how he reframes the work: give a task to an agent the way you'd give it to a coworker, send them off, come back and review when something's ready. Not hunched over a chat window watching tokens scroll. You stop being the person who chisels the code and become the person steering the intelligence. A professional maker of things. That reads less like a threat and more like a promotion.
+And I love how he reframes the work: give a task to an agent the way you'd give it to a coworker, send them off, come back and review when something's ready. You stop being the person who chisels the code and become the person steering the intelligence. A professional maker of things. That reads less like a threat and more like a promotion.
+
+The part of that which clicked hardest for me is the *how*: asynchronously. Don't sit in front of a chat window babysitting the loop, nudging each step along like it's pair programming with a slow intern. Hand over a goal — a problem, an outcome, not a task list — and walk away. Check back when there's something to review. The more synchronous you make it, the more you're still doing the job yourself, except now you're doing it through a text box. The whole point is the handoff. I want the loop as async as it can possibly get, because that's where the leverage lives: they work, I think, and neither of us waits on the other.
 
 ## The guilt that left me
 
