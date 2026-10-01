@@ -1,32 +1,20 @@
 ---
 title: "Go in one HTML file"
 date: "2026-10-01"
-excerpt: "A complete Chinese-rules Go game and an MCTS bot in a single dependency-free file — tested headless against the shipping code, shipped, then proved in Lean."
+excerpt: "I pointed an agent at Go to see what it could do. It built a game I actually play — then proved the rules in Lean. Mostly."
 ---
 
-The prompt was: "Create a complete playable game of Go. Chinese variant I think."
+I was free and wanted to put my agent to work, so I asked Claude Code to build a playable game of Go, Chinese rules. The model was Bunny Alpha, the stealth one on OpenRouter — people are speculating it's Minimax, whatever. It is really good. Especially at UI.
 
-One session later it was `go.html`: ~41KB, zero dependencies, no build step. Open it in a browser and play.
+What came out is `go.html`: one file, ~41KB, no dependencies, no build step. And the thing is fully playable — Chinese area scoring with komi, suicide and ko and superko handled, handicap stones, an MCTS bot with three levels, SGF export. I genuinely could not find bugs in the UI, and the UI itself is very good. It is something I could showcase, and I do actually play on it in my free time. I have since used the same setup to fix the UI of my older projects. For UI work I trust it completely now.
 
-## What it implements
+The bot is Monte-Carlo tree search with a small hand-scored playout table, sampling a few candidate moves at each step and taking the best. It plays real-enough Go that games feel normal. The README carries the honest limits: no measured strength, it passes too early sometimes, handicap stones don't change its style.
 
-Chinese area scoring (komi 5.5 on 9×9, 7.5 above), suicide forbidden, simple ko and positional superko, handicap stones on the real star points for each board size, seki counted for both sides, click-to-mark dead stones during scoring, and SGF export.
+Then the obvious follow-up: a game seems like the perfect place for Lean, so can you prove the engine consistent? The Lean pass was done by a different, weaker model in my setup (mimo v2.6-flash), and honestly it showed — slower, needed more hand-holding. But it got there: `lean/` proves the scoring partition invariant, restates the test positions as theorems, and proves the 5×5 scores structurally. No `sorry`.
 
-The part I'm happiest with is the testing. `harness.js` stubs the ~15 DOM calls the page needs and loads the actual `go.html` through `vm`, so `test.js` runs 112 assertions against the shipping code rather than a copy. Every scoring case also checks the invariant `stones + territory + neutral = N²`.
+Here is the part I am still unsure about, and I want to be straight about it: the game you play still runs the HTML file. I don't fully understand what the Lean proof covers — whether it says anything about the JavaScript in `go.html`, or whether it is a separate proof standing next to it. The 112-assertion test suite runs against the real shipping code, so that part I trust. The Lean part I am still making my mind up about.
 
-The tests earned their keep: territory was being counted |R|² times (a 24-point region scored 576), the SGF root node was missing its closing bracket, undo crashed on an empty history, and the move list was off by one so the first move displayed as "pass".
-
-## The bot
-
-Monte-Carlo tree search with UCT, and playouts scored by a small hand table: filling your own eye −400, playing inside your own area −260, self-atari −200, captures +40 plus 15 per stone, saving a group in atari +440. Each step samples 4 empty points and takes the best; below −120 it passes instead, which is how playouts end on settled positions. The search is time-sliced with `setTimeout` rather than `requestAnimationFrame`, because rAF stalls in background tabs. One playout costs 0.26ms on 9×9, which buys three levels from 0.7s to 6s a move.
-
-My favourite failure: with the default 7.5 komi on a 9×9, the bot opened D5, D6, pass, pass — game over in three moves. Komi is 5.5 on 9×9 now.
-
-Honest limits, carried over from the README: the bot has no measured strength, it occasionally passes too early on 13×13, and handicap stones don't change its style.
-
-## Then came the proof
-
-The session's last message was: "Can you prove the consistency of our engine using Lean?" That became `lean/`: the rules engine re-modelled in Lean 4 with the partition invariant proved as `scoreOn_partition`, the test positions restated as theorems, and the two 5×5 scores proved structurally instead of by evaluation. No `sorry`.
+Overall though: great experience. I pointed an agent at a game for fun and ended up with something I play, something tested, and something proved — in that order.
 
 **Play it: [go-mcts.vercel.app](https://go-mcts.vercel.app)** — code at
 [amanmprojects/go-mcts](https://github.com/amanmprojects/go-mcts).

@@ -119,7 +119,7 @@ export function getAllPosts(): PostMeta[] {
   const posts = files
     .map(parsePostFile)
     .filter((p): p is Post => p !== null)
-    .sort((a, b) => (a.dateISO < b.dateISO ? 1 : -1));
+    .sort((a, b) => b.dateISO.localeCompare(a.dateISO) || a.slug.localeCompare(b.slug));
 
   return posts.map((post) => ({
     slug: post.slug,
