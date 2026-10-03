@@ -76,6 +76,22 @@ export function renderMarkdown(markdown: string): string {
   });
 }
 
+function makeFallbackExcerpt(content: string): string {
+  const plain = content
+    .replace(/```[\s\S]*?```/g, " ") // fenced code blocks
+    .replace(/`([^`]+)`/g, "$1") // inline code
+    .replace(/^#{1,6}\s+/gm, "") // headings
+    .replace(/[*_~>\[\]]/g, "") // markdown punctuation
+    .replace(/!\[([^\]]*)\]\([^)]*\)/g, "$1") // images
+    .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1") // links
+    .replace(/\s+/g, " ")
+    .trim();
+
+  if (plain.length <= 160) return plain;
+  const cut = plain.slice(0, 160);
+  return `${cut.slice(0, cut.lastIndexOf(" "))}…`;
+}
+
 function parsePostFile(filename: string): Post | null {
   const slug = filename.replace(/\.md$/, "");
   const fullPath = path.join(postsDirectory, filename);
@@ -105,8 +121,7 @@ function parsePostFile(filename: string): Post | null {
     title: fm.title,
     date: formatDisplayDate(dateISO),
     dateISO,
-    excerpt:
-      fm.excerpt || content.trim().slice(0, 160).replace(/\s+/g, " "),
+    excerpt: fm.excerpt || makeFallbackExcerpt(content),
     href: `/writing/${slug}`,
     draft: Boolean(fm.draft),
     contentHtml,

@@ -15,7 +15,7 @@ function StoryLine({ item }: { item: StoryItem }) {
   let key = 0;
 
   for (const link of item.links) {
-    const idx = remaining.toLowerCase().indexOf(link.label.toLowerCase());
+    const idx = remaining.indexOf(link.label);
     if (idx === -1) continue;
     if (idx > 0) {
       parts.push(<span key={key++}>{remaining.slice(0, idx)}</span>);

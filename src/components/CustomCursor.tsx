@@ -29,6 +29,7 @@ function createArrow(fill: string) {
 export function CustomCursor() {
   useEffect(() => {
     if (!window.matchMedia("(pointer: fine)").matches) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     const root = document.getElementById("cursor-root");
     if (!root) return;
