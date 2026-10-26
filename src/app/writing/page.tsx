@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Content, SectionHeading } from "@/components/Content";
-import { getAllPosts, type PostMeta } from "@/lib/posts";
+import { getAllPosts, groupPostsByYear } from "@/lib/posts";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -22,18 +22,6 @@ export const metadata: Metadata = {
   },
 };
 
-function groupByYear(posts: PostMeta[]) {
-  const groups = new Map<number, PostMeta[]>();
-  for (const post of posts) {
-    const year = new Date(post.dateISO).getFullYear();
-    const list = groups.get(year) ?? [];
-    list.push(post);
-    groups.set(year, list);
-  }
-  // Years already newest-first because posts are sorted that way
-  return Array.from(groups.entries());
-}
-
 function formatListDate(iso: string) {
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return iso;
@@ -46,7 +34,7 @@ function formatListDate(iso: string) {
 
 export default function WritingPage() {
   const posts = getAllPosts();
-  const byYear = groupByYear(posts);
+  const byYear = groupPostsByYear(posts);
 
   return (
     <Content>

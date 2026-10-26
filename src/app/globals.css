@@ -1,12 +1,40 @@
 @import "tailwindcss";
 
+/*
+ * Theme: follows the OS by default. The toggle writes data-theme on <html>
+ * (see ThemeToggle), which pins color-scheme and so every light-dark() below.
+ */
+@custom-variant dark {
+  &:where([data-theme="dark"], [data-theme="dark"] *) {
+    @slot;
+  }
+  @media (prefers-color-scheme: dark) {
+    &:where(:root:not([data-theme="light"]), :root:not([data-theme="light"]) *) {
+      @slot;
+    }
+  }
+}
+
+:root {
+  color-scheme: light dark;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+/* Colors are light/dark pairs; both sides meet WCAG AA on paper and line. */
 @theme {
-  --color-paper: #fbfbf9;
-  --color-ink: #15171c;
-  --color-mute: #6b7280;
-  --color-line: #ececea;
-  --color-blue: #2f6bff;
-  --color-green: #18a058;
+  --color-paper: light-dark(#fbfbf9, #131311);
+  --color-surface: light-dark(#ffffff, #1a1a18);
+  --color-ink: light-dark(#15171c, #ececea);
+  --color-mute: light-dark(#6b7280, #9a9ea6);
+  --color-line: light-dark(#ececea, #2a2a28);
+  --color-blue: light-dark(#255ce6, #7aa2ff);
   --font-sans: var(--font-hanken), ui-sans-serif, system-ui, sans-serif;
 }
 
@@ -39,6 +67,18 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Suspends transitions for one frame while the theme flips */
+:root[data-theme-switching] *,
+:root[data-theme-switching] *::before {
+  transition: none !important;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-blue);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
 body {
   background: var(--color-paper);
   color: var(--color-ink);
@@ -58,12 +98,18 @@ body.grain::before {
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   background-repeat: repeat;
   background-size: 180px 180px;
+
+  @variant dark {
+    opacity: 0.05;
+  }
 }
 
 /* Gradient text like dhravya.dev */
 .grad {
+  --grad-a: light-dark(#2f6bff, #7aa2ff);
+  --grad-b: light-dark(#7c5cff, #a08bff);
   color: transparent;
-  background-image: linear-gradient(100deg, #2f6bff, #7c5cff, #2f6bff);
+  background-image: linear-gradient(100deg, var(--grad-a), var(--grad-b), var(--grad-a));
   background-size: 200%;
   -webkit-background-clip: text;
   background-clip: text;
@@ -76,7 +122,7 @@ body.grain::before {
   text-decoration: none;
   background-image: repeating-linear-gradient(
     -60deg,
-    rgba(21, 23, 28, 0.55) 0 1px,
+    color-mix(in srgb, var(--color-ink) 55%, transparent) 0 1px,
     transparent 1px 4px
   );
   background-position: 0 100%;
@@ -89,7 +135,7 @@ body.grain::before {
   color: var(--color-blue);
   background-image: repeating-linear-gradient(
     -60deg,
-    rgba(47, 107, 255, 0.7) 0 1px,
+    color-mix(in srgb, var(--color-blue) 70%, transparent) 0 1px,
     transparent 1px 4px
   );
 }
@@ -180,6 +226,10 @@ body.grain::before {
   .grad {
     animation: none;
   }
+
+  html {
+    scroll-behavior: auto;
+  }
 }
 
 /* Hide native cursor while custom cursor is active */
@@ -192,7 +242,7 @@ body.grain::before {
 
 /* Selection */
 ::selection {
-  background: rgba(47, 107, 255, 0.18);
+  background: color-mix(in srgb, var(--color-blue) 22%, transparent);
   color: var(--color-ink);
 }
 
@@ -225,18 +275,43 @@ body.grain::before {
   line-height: 1.35;
 }
 
-.prose p {
-  margin: 0;
+.prose :is(h2, h3, h4) {
+  scroll-margin-top: 1.5rem;
 }
 
-.prose a {
+/* Keep a heading closer to its own section than to the one above */
+.prose :is(h2, h3, h4) + * {
+  margin-top: 0;
+}
+
+/* Heading permalinks: the heading text links to itself, "#" shows on hover */
+.prose .anchor {
+  color: inherit;
+  text-decoration: none;
+}
+
+.prose .anchor::after {
+  content: "#";
+  margin-left: 0.35em;
+  color: var(--color-mute);
+  font-weight: 400;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.prose .anchor:hover::after,
+.prose .anchor:focus-visible::after {
+  opacity: 1;
+}
+
+.prose a:not(.anchor) {
   color: var(--color-blue);
   text-decoration: underline;
   text-underline-offset: 3px;
   text-decoration-thickness: 1px;
 }
 
-.prose a:hover {
+.prose a:not(.anchor):hover {
   text-decoration-thickness: 2px;
 }
 
@@ -266,10 +341,10 @@ body.grain::before {
 }
 
 .prose blockquote {
-  margin: 0;
   padding: 0.15em 0 0.15em 1em;
   border-left: 3px solid var(--color-line);
-  color: var(--color-mute);
+  /* A shade darker than mute so inline code inside still clears AA */
+  color: light-dark(#5f6672, #9a9ea6);
 }
 
 .prose hr {
@@ -288,11 +363,10 @@ body.grain::before {
 
 .prose pre {
   overflow-x: auto;
-  margin: 0;
   padding: 1rem 1.1rem;
   border-radius: 0.75rem;
   border: 1px solid var(--color-line);
-  background: #f4f4f1;
+  background: light-dark(#f4f4f1, #1a1a18);
   font-size: 0.875rem;
   line-height: 1.6;
 }
@@ -327,5 +401,5 @@ body.grain::before {
 
 .prose th {
   font-weight: 600;
-  background: #f6f6f3;
+  background: light-dark(#f6f6f3, #1a1a18);
 }
