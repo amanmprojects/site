@@ -2,6 +2,10 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { ThemeToggle } from "@/components/ThemeToggle";
+
+const itemClass =
+  "group flex min-h-11 min-w-11 items-center justify-center gap-3 rounded-lg px-2 py-2 transition-[color,background-color,transform] duration-150 active:scale-[0.96] md:w-full md:justify-between md:py-2.5";
 
 const nav = [
   {
@@ -72,7 +76,7 @@ export function Sidebar() {
   return (
     <nav
       id="site-sidebar"
-      className="fixed bottom-0 left-0 z-50 h-16 w-full border-t border-line bg-white/70 backdrop-blur-lg md:sticky md:top-0 md:h-screen md:w-40 md:shrink-0 md:border-t-0 md:border-r"
+      className="fixed bottom-0 left-0 z-50 h-16 w-full border-t border-line bg-surface/70 backdrop-blur-lg md:sticky md:top-0 md:h-screen md:w-40 md:shrink-0 md:border-t-0 md:border-r"
       aria-label="Primary"
     >
       <div className="flex h-full w-full flex-row items-center justify-evenly md:flex-col md:items-start md:justify-start md:gap-1 md:px-5 md:pt-7">
@@ -80,7 +84,8 @@ export function Sidebar() {
           const active =
             item.href === "/"
               ? pathname === "/"
-              : pathname.startsWith(item.href);
+              : pathname === item.href ||
+                pathname.startsWith(`${item.href}/`);
 
           return (
             <Link
@@ -89,10 +94,10 @@ export function Sidebar() {
               data-sidebar-item
               aria-label={item.label}
               aria-current={active ? "page" : undefined}
-              className={`group flex min-h-11 min-w-11 items-center justify-center gap-3 rounded-lg px-2 py-2 transition-[color,background-color,transform] duration-150 active:scale-[0.96] md:w-full md:justify-between md:py-2.5 ${
+              className={`${itemClass} ${
                 active
                   ? "text-blue"
-                  : "text-mute hover:bg-black/[0.03] hover:text-ink"
+                  : "text-mute hover:bg-ink/[0.04] hover:text-ink"
               }`}
             >
               <span className="hidden text-[15px] font-medium md:inline">
@@ -104,6 +109,9 @@ export function Sidebar() {
             </Link>
           );
         })}
+        <ThemeToggle
+          className={`${itemClass} cursor-pointer text-mute hover:bg-ink/[0.04] hover:text-ink md:mt-auto md:mb-6`}
+        />
       </div>
     </nav>
   );

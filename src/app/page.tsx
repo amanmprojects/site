@@ -3,41 +3,38 @@ import { Content, SectionHeading } from "@/components/Content";
 import { SocialLinks } from "@/components/SocialLinks";
 import { getAllPosts } from "@/lib/posts";
 import { site, type StoryItem } from "@/lib/site";
+import { splitStory } from "@/lib/story";
 
 function StoryLine({ item }: { item: StoryItem }) {
-  if (!item.links?.length) {
-    return <>{item.text}</>;
-  }
-
-  // Wrap known link labels in the story text with dotted links
-  const parts: React.ReactNode[] = [];
-  let remaining = item.text;
-  let key = 0;
-
-  for (const link of item.links) {
-    const idx = remaining.indexOf(link.label);
-    if (idx === -1) continue;
-    if (idx > 0) {
-      parts.push(<span key={key++}>{remaining.slice(0, idx)}</span>);
-    }
-    const matched = remaining.slice(idx, idx + link.label.length);
-    parts.push(
-      <a
-        key={key++}
-        href={link.href}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="lnk"
-      >
-        {matched}
-      </a>,
-    );
-    remaining = remaining.slice(idx + link.label.length);
-  }
-  if (remaining) parts.push(<span key={key++}>{remaining}</span>);
-
-  return <>{parts.length ? parts : item.text}</>;
+  return (
+    <>
+      {splitStory(item).map((segment, i) =>
+        segment.kind === "link" ? (
+          <a
+            key={i}
+            href={segment.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="lnk"
+          >
+            {segment.text}
+          </a>
+        ) : (
+          <span key={i}>{segment.text}</span>
+        ),
+      )}
+    </>
+  );
 }
+
+const personJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: site.name,
+  url: site.url,
+  description: site.description,
+  sameAs: Object.values(site.socials),
+};
 
 export default function Home() {
   const previewWriting = getAllPosts().slice(0, 5);
@@ -45,11 +42,18 @@ export default function Home() {
 
   return (
     <Content>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(personJsonLd).replace(/</g, "\\u003c"),
+        }}
+      />
+
       {/* Intro */}
       <p className="font-medium text-mute">{site.name}</p>
       <h1 className="mt-2 text-4xl font-bold tracking-tight sm:text-5xl">
         {site.headline.before}{" "}
-        <span className="grad">{site.headline.highlight1}</span>
+        <span className="grad">{site.headline.highlight1}</span>{" "}
         <br />
         {site.headline.middle}{" "}
         <span className="grad">{site.headline.highlight2}</span>
@@ -136,15 +140,18 @@ export default function Home() {
         </Link>
       </section>
 
-      {/* GitHub contributions */}
+      {/* GitHub contributions. Too wide for phones, so it scrolls there,
+          starting from the right edge (the latest weeks). */}
       <section className="mt-14">
-        <div className="overflow-x-auto rounded-xl border border-line p-4">
+        <div className="overflow-x-auto rounded-xl border border-line p-4 [direction:rtl]">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={`https://ghchart.rshah.org/2f6bff/${site.githubUsername}`}
             alt={`${site.name}'s GitHub contribution graph`}
+            width={663}
+            height={104}
             loading="lazy"
-            className="h-auto w-full min-w-[620px]"
+            className="h-auto w-full min-w-[620px] [direction:ltr] sm:min-w-0 dark:hue-rotate-180 dark:invert dark:contrast-[.82]"
           />
         </div>
         <p className="mt-2 text-sm text-mute">{site.footerNote}</p>
@@ -158,6 +165,9 @@ export default function Home() {
           className="u"
         >
           GitHub →
+        </a>
+        <a href="/resume" target="_blank" rel="noopener" className="u">
+          Resume →
         </a>
       </footer>
     </Content>

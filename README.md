@@ -5,10 +5,14 @@ A personal portfolio inspired by [dhravya.dev](https://dhravya.dev/), built with
 ## Features
 
 - Clean paper aesthetic with Hanken Grotesk, blue accent, and subtle grain
+- Light and dark themes: follows the OS, with a sidebar toggle that remembers
+  the choice (set before first paint, so no flash)
 - Sticky sidebar nav (bottom bar on mobile): Home · Writing · Stuff
 - Gradient headline, dotted bio links, animated underlines
 - Custom cursor on fine-pointer devices
-- Writing from Markdown files (`content/writing/`)
+- Writing from Markdown files (`content/writing/`), with heading permalinks,
+  reading time, newer/older links, a generated share image per post, and an
+  RSS feed at `/feed.xml`
 - Projects (“Stuff”) page
 - GitHub contribution graph
 - Single config file for site identity + projects
@@ -66,6 +70,10 @@ Your post body in **Markdown**.
 | `draft` | no | If `true`, hidden in production (still shown in dev) |
 
 - Files starting with `_` (like `_template.md`) are ignored.
+- `## Headings` get an id from their text, so `## The two designs` links as
+  `/writing/<slug>#the-two-designs`.
+- Unit tests fail if a post has invalid frontmatter or links to a
+  `/writing/...` post that doesn't exist.
 - Posts are sorted newest-first automatically.
 - Loader lives in `src/lib/posts.ts`.
 
@@ -79,7 +87,16 @@ npm run build    # production build
 npm run start    # serve production build
 npm run lint       # eslint
 npm run test       # unit tests
-npm run test:e2e   # browser smoke tests
+npm run test:e2e   # browser tests: pages, a11y (axe, light + dark), theme, posts
+```
+
+`test:e2e` starts `next dev` unless `BASE_URL` points at a running server. To
+test the production build, and to use a system Chromium instead of
+`npx playwright install`:
+
+```bash
+npm run build && npm run start -- --port 3100 &
+BASE_URL=http://127.0.0.1:3100 CHROMIUM_PATH=/usr/bin/chromium npm run test:e2e
 ```
 
 ## Stack
