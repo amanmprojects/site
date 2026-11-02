@@ -1,8 +1,9 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Hanken_Grotesk } from "next/font/google";
 import { Sidebar } from "@/components/Sidebar";
 import { CustomCursor } from "@/components/CustomCursor";
 import { site } from "@/lib/site";
+import { themeInitScript } from "@/lib/theme";
 import "./globals.css";
 
 const hanken = Hanken_Grotesk({
@@ -38,6 +39,13 @@ export const metadata: Metadata = {
   },
 };
 
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#fbfbf9" },
+    { media: "(prefers-color-scheme: dark)", color: "#131311" },
+  ],
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -48,7 +56,12 @@ export default function RootLayout({
       lang="en"
       className={`${hanken.variable} h-full antialiased`}
       data-scroll-behavior="smooth"
+      // The theme script below may set data-theme before React hydrates
+      suppressHydrationWarning
     >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+      </head>
       <body className="grain min-h-full font-sans text-ink">
         <div className="flex min-h-screen">
           <Sidebar />

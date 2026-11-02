@@ -38,7 +38,7 @@ export default function StuffPage() {
           {site.projects.map((project) => (
             <li
               key={project.name}
-              className="rounded-xl border border-transparent py-4 transition hover:border-line hover:bg-white/50"
+              className="rounded-xl border border-transparent py-4 transition hover:border-line hover:bg-surface/50"
             >
               <a
                 href={project.href}
