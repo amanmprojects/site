@@ -12,7 +12,7 @@ So this isn't a real post. It's a checkpoint, a note to future me about where I 
 
 ## From rationing tokens to burning billions
 
-Until this month, almost all the AI I used was free. I did use Claude Opus 5 quite a lot, but my lifetime usage, priced at API rates, would come to maybe $500. Most of the time I was on DeepSeek and the other free models OpenCode provides, and I got stuck with them more often than I'd like to admit.
+Until this month, almost all the AI I used was free or close to it. I did use Claude Opus 5 quite a lot, but through cheap third-party routers like AgentRouter, not Anthropic directly, and my lifetime usage, priced at API rates, would come to maybe $500. Most of the time I was on DeepSeek and the other free models OpenCode provides, and I got stuck with them more often than I'd like to admit.
 
 A long time ago I got a month of OpenCode Go for free. It was one of the best months I've had as a developer, because I got to try a lot of models. I was also so careful with the quota that by the end of the month there was a big chunk left and no way to use it up in time. I wanted to finish it and couldn't. That's how conservative I was with tokens.
 
@@ -20,9 +20,9 @@ The internship comes with Claude Code. The numbers so far:
 
 - About 1.5 billion tokens in roughly the first six days
 - Almost 2 billion tokens on November 4th alone
-- Another 600 million today, on Claude Opus 5.5
+- Another 600 million today
 
-That's over four billion tokens in two weeks, from someone who once couldn't finish a free monthly quota on purpose. The experience has been great.
+That's over four billion tokens in two weeks, almost all of it on Claude Opus 5.5, from someone who once couldn't finish a free monthly quota on purpose. It's thrilling. Opus 5.5 is a genuinely very good model.
 
 ## The job
 
