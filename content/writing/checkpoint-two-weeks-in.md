@@ -24,7 +24,7 @@ The internship comes with Claude Code. The numbers so far:
 
 That's over four billion tokens in two weeks, almost all of it on Claude Opus 5.5, from someone who once couldn't finish a free monthly quota on purpose. It's thrilling. Opus 5.5 is a genuinely very good model.
 
-## The job
+## The internship
 
 Honestly, Claude Code is the part of this internship I care about most.
 

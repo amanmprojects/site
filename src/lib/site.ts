@@ -22,6 +22,7 @@ export const site = {
     github: "https://github.com/amanmprojects",
     twitter: "https://x.com/Amanm10000",
     linkedin: "https://www.linkedin.com/in/aman-mehtar",
+    instagram: "https://www.instagram.com/amanm123_",
   },
   githubUsername: "amanmprojects",
   story: [

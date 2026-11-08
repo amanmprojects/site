@@ -1,7 +1,7 @@
 ---
 title: "Checkpoint: half the team is in Ladakh"
 date: "2026-11-08"
-excerpt: "A big remote machine, a stack of Claude accounts, fewer access blockers, and a job that is starting to feel worth it again."
+excerpt: "A big remote machine, a stack of Claude accounts, fewer access blockers, and an internship that is starting to feel worth it again."
 ---
 
 Another check-in. A few days ago about half my team left for a trip to Ladakh, and that half includes most of the team's biggest token burners. So for now I have two or three Claude Max 20x accounts to burn through myself. I also got a Google AI Ultra 5x plan for my council skill.
