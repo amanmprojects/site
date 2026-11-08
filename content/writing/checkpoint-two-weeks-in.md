@@ -4,7 +4,7 @@ date: "2026-11-05"
 excerpt: "Why I haven't posted, and what it's like to go from rationing free tokens to burning billions of them."
 ---
 
-I haven't posted here in a while. Part of the reason is the internship I started on October 23rd. Only part, though: I wasn't posting much before it either. But since the 23rd I have barely found time for anything at all.
+I haven't posted here in a while. Part of the reason is the internship I started on October 23rd. Only part, though: I wasn't posting much before it either. But since the 23rd I have barely found time for anything at all. It's called an internship, but at almost nine hours a day it's a job in everything but name.
 
 You think you can handle it. Everyone does. Then it hits you like a truck, and there was no way to see it coming.
 
