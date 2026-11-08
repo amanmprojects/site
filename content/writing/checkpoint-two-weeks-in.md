@@ -33,3 +33,16 @@ The company's roots aren't in tech, and the culture still shows it. It isn't the
 The rest is fine. Nothing glamorous, nothing terrible. I'm enjoying it about as much as I'm enjoying it.
 
 Now I'm going to leave something running overnight in Claude Code. More when I find the time.
+
+## Update, November 8
+
+That 600 million turned out to be a fraction of the day. My usage for the four days since November 4th:
+
+| day | tokens |
+|---|---|
+| November 4 | 2.02 billion |
+| November 5 | 5.06 billion |
+| November 6 | 2.20 billion |
+| November 7 | 5.70 billion |
+
+That's almost 15 billion tokens in four days. To be fair to my past self, about 96% of it is cache reads, the same context read back on every turn. Actual output was around 55 million tokens. Still. lol.
