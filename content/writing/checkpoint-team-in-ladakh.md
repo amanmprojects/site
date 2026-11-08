@@ -33,6 +33,8 @@ And then there's Orchestrator V2, which is unbelievably good. T3 Code exposes it
 
 A few months ago I would have called T3 Code yet another UI, a Codex clone. Now the Codex app doesn't come close to what T3 Code does. I won't pretend I never doubted it, but I was wrong, and I appreciate the work that went into it. To put it lightly, it has taste, really good taste, and that's what matters.
 
+I'd recommend it to anyone doing any kind of agentic work, whether that's in Claude Code, Codex, Antigravity, or even Muse Code or OpenCode for those people.
+
 I genuinely struggle to find even one problem with the workflow. What Theo Browne and his team, especially Julius Marminge, have built is unbelievably good. I'd love to make a video about it, but I have neither the time nor any content creation experience.
 
 ## Access, and agents waiting on you
