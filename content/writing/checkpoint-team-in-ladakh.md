@@ -22,12 +22,12 @@ So I stopped doing that and use [T3 Code](https://github.com/pingdotgg/t3code) i
 
 But fixing SSH is the least of it. The whole app is built for long-running, asynchronous agent work, which is exactly how I work now:
 
-- **Threads that settle.** A thread is one task. When it's done it settles out of the way onto a shelf, and you can pin, snooze, or drag threads between sections. With a dozen agents running, the sidebar is the difference between managing them and losing track of them.
-- **The composer.** Rich Markdown as you type, up to 100 attachments per message, and huge pastes turn into file attachments instead of flooding the model's context.
-- **Git built in.** New threads can get their own worktree and branch. Each turn's diff shows only that turn's own work, you can step through commits one at a time, and pull requests open right inside the app. It works with GitHub, GitLab and a bunch of other hosts.
-- **Secrets.** Credentials can stay in 1Password with T3 Code saving only a reference, and when an agent needs a secret it asks for it in a private card instead of in the chat.
-- **Multiple environments.** My laptop, the work VM, and anything else running the T3 Code server all show up in one app, and a thread can start on whichever machine has the project. Moving between them is so seamless it's unbelievable.
-- **Any harness.** It drives Claude Code, Codex, Cursor, OpenCode, Grok Build, Antigravity and more, with your existing subscriptions.
+- **Settling.** When a thread's task is done, it settles out of the way. With a lot of agents running at once, that's how I keep track of what still needs me.
+- **The composer.** Markdown, a pile of attachments, giant pastes that become files instead of eating the context. It takes whatever I throw at it.
+- **Git.** I give threads their own worktree and branch, review each turn's diff on its own, and open PRs without leaving the app.
+- **Secrets.** When an agent needs a secret, it asks me for it in a private card instead of in the chat.
+- **Multiple environments.** My laptop and the work VM sit side by side in one app. Moving between them is so seamless it's unbelievable.
+- **Any harness.** Claude Code, Codex, Antigravity and the rest all run from the same place, on the subscriptions I already have.
 
 And then there's Orchestrator V2, which is unbelievably good. T3 Code exposes its orchestration as an MCP server, so an agent in one thread can spin up sub-agents on any provider, wait for their results, start and message other threads, and schedule recurring work. Claude can hand a review to Codex and get the answer back in the same turn. Agents outside T3 Code can connect to it too.
 
@@ -35,7 +35,7 @@ A few months ago I would have called T3 Code yet another UI, a Codex clone. Now 
 
 I'd recommend it to anyone doing any kind of agentic work, whether that's in Claude Code, Codex, Antigravity, or even Muse Code or OpenCode for those people.
 
-I genuinely struggle to find even one problem with the workflow. What Theo Browne and his team, especially Julius Marminge, have built is unbelievably good. I'd love to make a video about it, but I have neither the time nor any content creation experience.
+I do hit a bug here and there, but it's rare, and I'm on the nightly build, which ships a new version several times a day. It feels like it improves by the hour. What Theo Browne and his team, especially Julius Marminge, have built is unbelievably good. I'd love to make a video about it, but I have neither the time nor any content creation experience. Maybe in the future.
 
 ## Access, and agents waiting on you
 
