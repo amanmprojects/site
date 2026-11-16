@@ -32,4 +32,4 @@ Here's what that looks like. Before on the left, after on the right, all demo da
 
 ![Team screen, before and after the hill climb](/images/ui-hill-climbing/page-7.png)
 
-The part I've fallen in love with is the council itself, through the council skill Theo made. Whatever change or feature I'm working on, putting it in front of a council of models makes it so much better. It's not only for UI. I use it for everything now.
+The part I've fallen in love with is the council itself, through the [council skill](https://github.com/t3dotgg/tstack/tree/main/skills/council) from Theo's [tstack](https://github.com/t3dotgg/tstack), his set of agent skills. Whatever change or feature I'm working on, putting it in front of a council of models makes it so much better. It's not only for UI. I use it for everything now.
