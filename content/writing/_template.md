@@ -2,6 +2,7 @@
 title: "Your post title"
 date: "2026-07-16"
 excerpt: "One-line teaser shown on the home page and /writing list."
+# time: "18:30"  # optional, orders posts that share a date
 # draft: true
 ---
 

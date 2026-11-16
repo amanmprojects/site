@@ -1,6 +1,7 @@
 ---
 title: "Hill climbing UI with a council of models"
 date: "2026-11-16"
+time: "16:15"
 excerpt: "Agents used to be bad at UI. Ask several of them for their opinion and keep climbing, and it turns out they aren't."
 ---
 

@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it } from "vitest";
 import {
   getAdjacentPosts,
+  comparePosts,
   getAllPosts,
   groupPostsByYear,
   makeFallbackExcerpt,
@@ -21,6 +22,29 @@ function meta(slug: string, dateISO: string): PostMeta {
     readingMinutes: 1,
   };
 }
+
+describe("comparePosts", () => {
+  it("puts newer dates first", () => {
+    const posts = [meta("a", "2026-11-10"), meta("b", "2026-11-16")];
+    expect(posts.sort(comparePosts).map((p) => p.slug)).toEqual(["b", "a"]);
+  });
+
+  it("orders posts on the same date by time, latest first", () => {
+    const morning = { ...meta("z-morning", "2026-11-16"), time: "09:00" };
+    const evening = { ...meta("a-evening", "2026-11-16"), time: "18:30" };
+    const untimed = meta("m-untimed", "2026-11-16");
+    expect([morning, untimed, evening].sort(comparePosts).map((p) => p.slug)).toEqual([
+      "a-evening",
+      "z-morning",
+      "m-untimed",
+    ]);
+  });
+
+  it("falls back to slug order when date and time match", () => {
+    const posts = [meta("b", "2026-11-16"), meta("a", "2026-11-16")];
+    expect(posts.sort(comparePosts).map((p) => p.slug)).toEqual(["a", "b"]);
+  });
+});
 
 describe("slugifyHeading", () => {
   it.each([

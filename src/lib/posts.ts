@@ -16,6 +16,8 @@ export type PostMeta = {
   date: string;
   /** ISO date for sorting */
   dateISO: string;
+  /** Optional "HH:MM", only used to order posts that share a date */
+  time?: string;
   excerpt: string;
   href: string;
   readingMinutes: number;
@@ -37,6 +39,10 @@ const frontmatterSchema = z.object({
     }, {
       message: "must be a valid date",
     }),
+  time: z
+    .string()
+    .regex(/^([01]\d|2[0-3]):[0-5]\d$/, "must use HH:MM (24-hour)")
+    .optional(),
   excerpt: z.string().trim().optional(),
   draft: z.boolean().optional().default(false),
 });
@@ -180,6 +186,7 @@ function parsePostFile(filename: string): ParsedPost | null {
       title: fm.title,
       date: formatDisplayDate(dateISO),
       dateISO,
+      time: fm.time,
       excerpt: fm.excerpt || makeFallbackExcerpt(content),
       href: `/writing/${slug}`,
       readingMinutes: readingMinutes(content),
@@ -195,7 +202,13 @@ export function getAllPosts(): PostMeta[] {
     .map(parsePostFile)
     .filter((p): p is ParsedPost => p !== null)
     .map((p) => p.meta)
-    .sort((a, b) => b.dateISO.localeCompare(a.dateISO) || a.slug.localeCompare(b.slug));
+    .sort(comparePosts);
+}
+
+/** Newest first: by date, then by time on the same date, then by slug. */
+export function comparePosts(a: PostMeta, b: PostMeta): number {
+  const key = (p: PostMeta) => `${p.dateISO}T${p.time ?? "00:00"}`;
+  return key(b).localeCompare(key(a)) || a.slug.localeCompare(b.slug);
 }
 
 /** Full post by slug, or null if missing. */
