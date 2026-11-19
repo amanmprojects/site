@@ -2,6 +2,7 @@ import fs from "fs";
 import path from "path";
 import AxeBuilder from "@axe-core/playwright";
 import { expect, type Page } from "@playwright/test";
+import { projects } from "../../src/lib/projects";
 
 export const postSlugs = fs
   .readdirSync(path.join(process.cwd(), "content", "writing"))
@@ -12,7 +13,9 @@ export const pageRoutes = [
   "/",
   "/writing",
   "/stuff",
+  "/oss",
   ...postSlugs.map((slug) => `/writing/${slug}`),
+  ...projects.map((project) => `/stuff/${project.slug}`),
 ];
 
 /** Collects console errors and uncaught exceptions for the page's lifetime. */

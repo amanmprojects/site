@@ -5,7 +5,7 @@ test("mobile navigation exposes named, usable links", async ({ page }) => {
   await page.goto("/");
 
   const navigation = page.getByRole("navigation", { name: "Primary" });
-  for (const name of ["Home", "Writing", "Stuff"]) {
+  for (const name of ["Home", "Writing", "Stuff", "OSS"]) {
     const link = navigation.getByRole("link", { name, exact: true });
     await expect(link).toBeVisible();
     const box = await link.boundingBox();

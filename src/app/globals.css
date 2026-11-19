@@ -17,6 +17,10 @@
 
 :root {
   color-scheme: light dark;
+  /* Chart series, validated as a pair for CVD and contrast in each mode.
+     Kept outside @theme so they exist even when no utility uses them. */
+  --chart-s1: light-dark(#255ce6, #5b86f0);
+  --chart-s2: light-dark(#c2410c, #e06c1f);
 }
 
 :root[data-theme="light"] {
@@ -35,6 +39,8 @@
   --color-mute: light-dark(#6b7280, #9a9ea6);
   --color-line: light-dark(#ececea, #2a2a28);
   --color-blue: light-dark(#255ce6, #7aa2ff);
+  --color-s1: var(--chart-s1);
+  --color-s2: var(--chart-s2);
   --font-sans: var(--font-hanken), ui-sans-serif, system-ui, sans-serif;
 }
 
@@ -214,7 +220,32 @@ body.grain::before {
   }
 }
 
+/* A dot travelling down a Pipeline connector */
+@keyframes flow-pulse {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  15%,
+  80% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(38px);
+    opacity: 0;
+  }
+}
+
+.flow-pulse {
+  animation: flow-pulse 1.8s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .flow-pulse {
+    animation: none;
+    opacity: 0;
+  }
+
   .cursor-dot.is-link .cursor-ring {
     animation: none;
   }

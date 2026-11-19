@@ -2,6 +2,8 @@ import fs from "fs";
 import path from "path";
 import { describe, expect, it } from "vitest";
 import { getAllPosts, getPostBySlug, renderMarkdown } from "@/lib/posts";
+import { formatStars, ossProjects } from "@/lib/oss";
+import { getProject, projectGroups, projects } from "@/lib/projects";
 import { site } from "@/lib/site";
 import { splitStory } from "@/lib/story";
 
@@ -22,14 +24,58 @@ describe("site content", () => {
     }
   });
 
-  it("keeps project links unique", () => {
-    const links = site.projects.map((project) => project.href);
-    expect(new Set(links).size).toBe(links.length);
+  it("keeps project slugs, names and repos unique", () => {
+    for (const key of ["slug", "name", "repo"] as const) {
+      const values = projects.map((project) => project[key]).filter(Boolean);
+      expect(new Set(values).size, key).toBe(values.length);
+    }
   });
 
-  it("keeps project names unique, since they are React keys", () => {
-    const names = site.projects.map((project) => project.name);
-    expect(new Set(names).size).toBe(names.length);
+  it("gives every project a URL-safe slug, a known group and a start month", () => {
+    for (const project of projects) {
+      expect(project.slug).toMatch(/^[a-z0-9]+(?:-[a-z0-9]+)*$/);
+      expect(projectGroups).toContain(project.group);
+      expect(project.started).toMatch(/^\d{4}-(0[1-9]|1[0-2])$/);
+      expect(getProject(project.slug)).toBe(project);
+    }
+  });
+
+  it("gives every project an explanation, an architecture and real screenshots", () => {
+    for (const project of projects) {
+      expect(project.howItWorks.length, project.slug).toBeGreaterThan(0);
+      expect(project.architecture.stages.length, project.slug).toBeGreaterThanOrEqual(3);
+      for (const shot of project.screenshots ?? []) {
+        expect(shot.src, project.slug).toMatch(/^\/images\/stuff\//);
+        expect(fs.existsSync(path.join(process.cwd(), "public", shot.src)), shot.src).toBe(true);
+        expect(shot.alt.length, shot.src).toBeGreaterThan(10);
+      }
+    }
+  });
+
+  it("links projects only to posts that exist", () => {
+    for (const project of projects) {
+      for (const slug of project.posts ?? []) {
+        expect(getPostBySlug(slug), `${project.slug} → ${slug}`).not.toBeNull();
+      }
+    }
+  });
+
+  it("lists each open source repo and pull request once", () => {
+    const repos = ossProjects.map((p) => p.repo);
+    expect(new Set(repos).size).toBe(repos.length);
+    for (const project of ossProjects) {
+      expect(project.repo).toMatch(/^[\w.-]+\/[\w.-]+$/);
+      const numbers = project.prs.map((pr) => pr.number);
+      expect(new Set(numbers).size, project.repo).toBe(numbers.length);
+      for (const pr of project.prs) expect(pr.merged).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+    }
+  });
+
+  it("formats star counts compactly", () => {
+    expect(formatStars(34)).toBe("34");
+    expect(formatStars(981)).toBe("981");
+    expect(formatStars(21216)).toBe("21.2K");
+    expect(formatStars(3000)).toBe("3K");
   });
 
   it("loads published posts and rejects invalid slugs", () => {

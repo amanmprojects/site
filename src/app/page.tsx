@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Content, SectionHeading } from "@/components/Content";
 import { SocialLinks } from "@/components/SocialLinks";
 import { getAllPosts } from "@/lib/posts";
+import { homeProjects, projectHref } from "@/lib/projects";
 import { site, type StoryItem } from "@/lib/site";
 import { splitStory } from "@/lib/story";
 
@@ -38,7 +39,7 @@ const personJsonLd = {
 
 export default function Home() {
   const previewWriting = getAllPosts().slice(0, 5);
-  const previewProjects = site.projects.slice(0, 4);
+  const previewProjects = homeProjects(4);
 
   return (
     <Content>
@@ -118,20 +119,11 @@ export default function Home() {
         <SectionHeading>Stuff</SectionHeading>
         <ul className="mt-4">
           {previewProjects.map((project) => (
-            <li key={project.name} className="py-2">
-              <a
-                href={project.href}
-                target={project.href.startsWith("http") ? "_blank" : undefined}
-                rel={
-                  project.href.startsWith("http")
-                    ? "noopener noreferrer"
-                    : undefined
-                }
-                className="u font-medium"
-              >
+            <li key={project.slug} className="py-2">
+              <Link href={projectHref(project)} className="u font-medium">
                 {project.name}
-              </a>
-              <span className="text-mute"> — {project.description}</span>
+              </Link>
+              <span className="text-mute"> — {project.tagline}</span>
             </li>
           ))}
         </ul>

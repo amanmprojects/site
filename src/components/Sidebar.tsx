@@ -68,6 +68,33 @@ const nav = [
       </svg>
     ),
   },
+  {
+    href: "/oss",
+    label: "OSS",
+    icon: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 20 20"
+        width="19"
+        height="19"
+        aria-hidden
+      >
+        {/* A merged pull request: two branches joining */}
+        <path
+          className="fill-current"
+          fillOpacity=".16"
+          d="M5 2.5a2 2 0 1 1 0 4 2 2 0 0 1 0-4Zm0 11a2 2 0 1 1 0 4 2 2 0 0 1 0-4Zm10 0a2 2 0 1 1 0 4 2 2 0 0 1 0-4Z"
+        />
+        <g fill="none" stroke="currentColor" strokeWidth="1.5">
+          <circle cx="5" cy="4.5" r="2" />
+          <circle cx="5" cy="15.5" r="2" />
+          <circle cx="15" cy="15.5" r="2" />
+          <path d="M5 6.5v7M15 13.5V9a3 3 0 0 0-3-3H8.5" />
+          <path d="M10.5 3.75 8.25 6l2.25 2.25" />
+        </g>
+      </svg>
+    ),
+  },
 ];
 
 export function Sidebar() {

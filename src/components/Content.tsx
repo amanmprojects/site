@@ -1,7 +1,16 @@
-export function Content({ children }: { children: React.ReactNode }) {
+export function Content({
+  children,
+  wide = false,
+}: {
+  children: React.ReactNode;
+  /** Room for card grids and charts */
+  wide?: boolean;
+}) {
   return (
     <main className="grow overflow-hidden px-6 pb-24 md:pb-0">
-      <div className="page-enter mx-auto max-w-xl py-24 sm:py-32">
+      <div
+        className={`page-enter mx-auto py-24 sm:py-32 ${wide ? "max-w-2xl" : "max-w-xl"}`}
+      >
         {children}
       </div>
     </main>

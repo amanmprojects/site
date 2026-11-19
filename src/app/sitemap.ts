@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { getAllPosts } from "@/lib/posts";
+import { projectHref, projects } from "@/lib/projects";
 import { site } from "@/lib/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -21,6 +22,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
     },
     { url: `${site.url}/stuff`, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${site.url}/oss`, changeFrequency: "monthly", priority: 0.7 },
   ];
 
   const posts: MetadataRoute.Sitemap = allPosts.map((post) => ({
@@ -30,5 +32,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }));
 
-  return [...pages, ...posts];
+  const projectPages: MetadataRoute.Sitemap = projects.map((project) => ({
+    url: `${site.url}${projectHref(project)}`,
+    changeFrequency: "monthly",
+    priority: 0.7,
+  }));
+
+  return [...pages, ...posts, ...projectPages];
 }

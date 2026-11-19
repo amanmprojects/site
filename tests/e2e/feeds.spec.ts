@@ -15,7 +15,7 @@ test("the RSS feed lists every post", async ({ request }) => {
 
 test("the sitemap lists every page and post", async ({ request }) => {
   const xml = await (await request.get("/sitemap.xml")).text();
-  for (const path of ["", "/writing", "/stuff", ...postSlugs.map((s) => `/writing/${s}`)]) {
+  for (const path of ["", "/writing", "/stuff", "/oss", ...postSlugs.map((s) => `/writing/${s}`)]) {
     expect(xml).toContain(`<loc>${SITE}${path}</loc>`);
   }
 });
