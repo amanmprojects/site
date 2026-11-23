@@ -2,7 +2,6 @@
 title: "Why does next-token prediction work so well?"
 date: "2026-11-23"
 excerpt: "A sentence from Dario Amodei's interview with Dwarkesh Patel made next-token prediction click for me."
-draft: true
 ---
 
 I kept wondering how a task as simple as predicting the next token could produce something this capable. Companies are talking about human-level intelligence, systems that could run huge parts of the world, and a technology that could fundamentally change how we live. How do you get from predicting the next word to all of that?

@@ -2,7 +2,6 @@
 title: "Why recursive self-improvement scares me"
 date: "2026-11-23"
 excerpt: "Models helping build better models is an obvious temptation. The part that scares me is who understands and checks the resulting loop."
-draft: true
 ---
 
 In my [previous post](/writing/why-next-token-prediction-works), I tried to explain why next-token prediction finally clicked for me. Architecture, data, and compute were the ingredients I kept coming back to.
