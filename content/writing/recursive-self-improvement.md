@@ -1,5 +1,5 @@
 ---
-title: "Why recursive self-improvement scares me"
+title: "Recursive Self-Improvement (RSI)"
 date: "2026-11-23"
 excerpt: "Models helping build better models is an obvious temptation. The part that scares me is who understands and checks the resulting loop."
 ---
