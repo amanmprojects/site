@@ -1,34 +1,36 @@
 ---
 title: "Why does next-token prediction work so well?"
-date: "2026-11-23"
+date: "2026-11-22"
 excerpt: "A sentence from Dario Amodei's interview with Dwarkesh Patel made next-token prediction click for me."
 ---
 
-I kept wondering how a task as simple as predicting the next token could produce something this capable. Companies are talking about human-level intelligence, systems that could run huge parts of the world, and a technology that could fundamentally change how we live. How do you get from predicting the next word to all of that?
+I was wondering, and I think we all wonder: how can something as simple as next-token prediction get us here? Companies claim these models have already reached human-level intelligence. These systems are supposedly going to run the world and change the entire meta.
 
-Some people think AI is overhyped. I find that frustrating now, because I think many people still don't understand how powerful these models are becoming. Forget understanding LLMs: plenty of people don't even know how a computer works. To them, this might as well be alien technology. I'm genuinely concerned about the gap between what these systems can do and how little people understand them.
+And some people don't believe this. Some people doubt it and think AI is overhyped. Genuinely, it's annoying, because people don't understand how important and how powerful these models are. I am genuinely concerned for many people in this world. Forget about LLMs, they don't even know how a computer works. To them LLMs are basically alien technology, and with how powerful these models are becoming, they are going to rule the world.
 
-I believe this technology is going to change the world so fundamentally that it will become hard to imagine life before this era. But I didn't always believe that.
+None of this is secret. It's all very public. But to summarize: this technology is going to change the world so fundamentally, and in such an unimaginable way, that it will be extremely hard to imagine life as it was before this era.
 
-## I was skeptical too
+## I was part of that group
 
-A year or two ago, models would output complete slop when the difficulty went up even slightly. So it's natural to wonder whether there's a wall: some hard limit on how much intelligence we can get out of this approach. I wondered that too.
+Now, for the people who have doubts, which included me for a very long time, I'll accept that.
 
-Earlier this year, around the Fable releases, I had mixed feelings about the labs' safety warnings. When Anthropic restricted access to Claude Mythos Preview through [Project Glasswing](https://www.anthropic.com/glasswing), part of me thought it was marketing.
+Even one or two years ago, models used to output complete slop when the difficulty went up even slightly. So it's natural that many people don't accept that these models can reach such a high threshold. They believe there's a wall, a very hard limit on how much intelligence we can get out of these models. I was part of this group.
 
-Maybe the model was too expensive. Maybe it wasn't as good as they made it sound, and keeping it out of the public's hands meant nobody could check. Maybe the safety warnings were a way to get companies that had resisted AI to start adopting it out of fear. Increase their market share, or increase the size of the market itself.
+Earlier this year the Fable models were introduced. Slightly before that, companies like Anthropic and OpenAI were all still very doomer. They said a lot about AI safety, especially around Mythos. Anthropic said it wasn't going to release the model publicly because it was too unsafe, and did [Project Glasswing](https://www.anthropic.com/glasswing) instead.
 
-I'm not proud of that, but I want to admit it before I start patronizing anyone else for doubting these models. I didn't discuss this with anyone or identify with a particular camp. It was just something I half-believed.
+I'm ashamed to say this, but at some point I believed this was hype. This was marketing. I didn't understand LLMs at that point. This is hard for me to accept, and I don't know if it's the right thing to do, but I think setting up the context and admitting I was part of this group before patronizing others is the right thing to do.
 
-The other half was already starting to take the warnings seriously. Theo Browne, the T3.gg guy, made videos saying that the people at these companies genuinely cared about safety. They were serious about it. That mattered to me, and I did have some trust in Anthropic. It just wasn't very strong yet.
+So yeah, I used to think it was hype and nobody should fucking care about it. They don't want to release it for whatever reason. Maybe it's too expensive. Maybe the model is not as good as it seems, so they want to hide it from people. Or with Project Glasswing they're just trying to get into more companies, to get companies that previously resisted AI to start using it out of fear. Increase their market share, or increase the size of their market.
 
-Then some insane shit happened. The models kept getting better, and I gradually learned things that changed how I thought about them. Very recently, I've started to believe that these models are already superhuman in some areas, and that we haven't seen their limit.
+I was 50% this person. By then I had started to believe it, because Theo Browne, the T3.gg guy, made videos saying this is not hype. The people at these companies are genuinely serious about safety. He didn't think it was hype or snake oil. So I did believe in Anthropic at that point, but not that strongly.
 
-But the thing that really made next-token prediction click for me was an older interview.
+I don't want to put myself in any group, because I never discussed this with anyone. But I also believed that maybe it was overhyped, that the models have a limit or whatever.
+
+Then some insane shit happened. And over time I learned things that led me to believe, very recently to be honest, that these models are superhuman.
 
 ## The sentence that made it click
 
-I recently watched [Dario Amodei's August 8, 2023 interview on the Dwarkesh Podcast](https://www.dwarkesh.com/p/dario-amodei). In the [language section, starting at 15:57](https://www.youtube.com/watch?v=Nlkk3glap_U&t=957s), Dario says:
+I recently watched [Dario Amodei on the Dwarkesh Podcast](https://www.dwarkesh.com/p/dario-amodei), and this is the actual topic of this post. He said one very beautiful thing that made it click for me why next-token prediction works as well as it does. From the [language section, starting at 15:57](https://www.youtube.com/watch?v=Nlkk3glap_U&t=957s):
 
 > I think this whole idea of the next word prediction, that you could do self supervised learning, together with the idea that there's so much richness and structure there for predicting the next word. It might say two plus two equals and you have to know the answer is four. It might be telling the story about a character.
 
@@ -36,76 +38,64 @@ I recently watched [Dario Amodei's August 8, 2023 interview on the Dwarkesh Podc
 
 > To get this right in the service of predicting the next word the models are going to have to solve all these theory of mind problems, solve all these math problems. And so my thinking was just, well, you scale it up as much as you can. There's kind of no limit to it.
 
-That part stuck with me.
+In the process of predicting the next token, the model has to learn grammar, it has to learn facts, and it has to solve all these problems: anaphora, NLP problems, theory of mind problems.
 
-If the text says “two plus two equals,” predicting what comes next requires knowing the answer. If a story describes someone putting an object in a room, another person moving it, and the first person not seeing that happen, predicting the continuation can require tracking what each person knows.
+Next-token prediction is almost like unsupervised learning to me. I know it's technically supervised, or self-supervised, whatever. But it feels unsupervised. It's like: just learn whatever the fuck you can.
 
-The model has to learn grammar. It has to learn facts. It has to track what words and pronouns refer to, solve problems, and sometimes reason about another person's beliefs. All of those things can matter to the same prediction task.
+And that's why next-token prediction is such a fundamental task. Almost no LLM created to date deviates from it, no matter how big it gets, because it's a very feasible task. It's what is possible.
 
-Next-token prediction feels almost unsupervised to me. The proper term is *self-supervised*: the text supplies its own targets, so we don't need someone to label every example by hand. But the intuition that stuck with me is basically: learn whatever the fuck you can from the data.
+## Architecture and data
 
-And language contains a lot to learn.
+Here's why I think next-token prediction is the optimal thing.
 
-## The data is already there
+There is a neural network, and there is data. The neural network has to be complex enough to fit the data. Models before LLMs, before GPT or BERT, were underfitting. They simply didn't have enough complexity or the right architecture to capture the underlying representations in the data.
 
-There is a neural network, and there is data. The model needs enough capacity, an architecture that can make use of that capacity, and enough training to capture the structure in the data.
+And we had tons upon tons of data. But the model wasn't sophisticated enough, or we didn't train it for long enough, to actually see the emergent capabilities or the scaling laws.
 
-We already had enormous amounts of text before modern LLMs. The question was how to make use of it. Transformers gave us an architecture that scaled well, and we found that prediction loss improved predictably as we increased model size, training data, and compute in the right balance. That's the useful part of the scaling laws. It isn't a claim that intelligence goes up in a straight line.
+Then at some point we stumbled upon the architecture that works: the transformer. And there is such good scaling of intelligence with respect to the amount of data, the amount of compute, and the number of parameters.
 
-So now you want vast amounts of data. Much of it is unstructured, but most text produced by humans encodes at least something about humans or the world.
+That's why next-token prediction works. You just pick up anything and everything you can find on the internet, because the scaling laws are dictated by the number of parameters, the amount of training, and the amount of data. So you need to collect all the data you can find. More is almost never bad when training an LLM.
 
-Even a stupid, apparently inconsequential Twitter post:
+You collect vast amounts of unstructured data, which may or may not make sense. But most of the text produced by humans does make sense. It encodes at least something about humans or about the world.
+
+Even a very stupid, inconsequential-feeling Twitter post:
 
 > My cat pooped today.
 
-What the fuck is an LLM going to learn from that?
+You might say, what the fuck is it going to learn from this? But somewhere in its latent space, its internal representation, it will learn something. Let's say this is the first sentence the LLM ever sees, and it doesn't know what a cat is yet. It will still learn that the token "cat" has something to do with the token "poop". And the word "steel" usually does not have a lot to do with poop.
 
-Well, something. Imagine it doesn't yet know what a cat is. That sentence is a small piece of evidence that the word “cat” has something to do with “pooped.” Across many other sentences, those relationships accumulate. “Steel” will appear in a different set of contexts and relationships.
+That's the anything-and-everything philosophy of training LLMs. It's why the data requirements are what they are, why pretraining is important, and why next-token prediction is important. From hundreds of billions upon hundreds of billions of tokens, if the architecture is complex enough, it will learn pretty much anything that's encoded in the text. If text can sufficiently describe the world in a 3D sense, it will learn the 3D world as well. It doesn't matter what's in the text. As long as the architecture has enough capacity to learn it, it will learn it.
 
-One sentence doesn't teach the model what a cat is. But hundreds of billions or trillions of tokens give it an enormous number of these little pieces of evidence. With enough capacity and effective training, it can build much richer representations from them.
-
-That's the part I find beautiful. A sentence doesn't need to look like a textbook example to contain information. Ordinary language carries information about how the world works, even when nobody is trying to teach anything.
-
-If text describes relationships in a three-dimensional world, those relationships can also become part of what the model learns. Its internal representations don't have to stop at associations between words.
-
-More data isn't automatically better. Quality, repetition, and the mix of sources matter. But the sheer amount of usable text is a huge advantage. Next-token prediction gives us a practical way to train on it without first turning every document into a specially designed lesson.
-
-That's why this objective makes so much sense to me. The data is there, and the training target is already inside it.
-
-There's another line from the same interview that I loved. Dario recalls Ilya Sutskever saying:
+As Ilya Sutskever once said, at least the way Dario recalls it in the same interview:
 
 > Look. The models, they just want to learn. You have to understand this. The models, they just want to learn.
 
-Dario then talks about getting obstacles out of the way: giving models good data and enough room to operate, and avoiding mistakes in how they're trained. The longer explanation is Dario's; the line about models wanting to learn is what Dario attributes to Ilya.
-
-That captures the intuition for me. We have to give them the conditions in which they can learn.
+We just have to give them the right tools, the right environment, the right data.
 
 ## Pretraining is mechanical
 
-The other reason next-token prediction seems so good to me is how straightforward the training process is.
+So the data is there. The other thing is training. Next-token prediction is one of the most parallelizable tasks there is.
 
-Take a batch of text. Predict the next tokens. Compute the error, compute the gradients, backpropagate. Take another batch and do it again.
+RL is also very parallelizable, but it requires the model to have a sandbox of its own and do stuff in that sandbox, the RL environment. That isn't parallelizable to the same degree as pretraining. With pretraining you can pick out every single random-ass GPU you have and make sure it's at least contributing a little to the process.
 
-While generating text is sequential, training can compute predictions for many positions in a sequence at once. The workload is regular, which makes it easier to batch and scale across GPUs. Memory and communication between GPUs still matter, but the basic operation is predictable.
+I don't know, pretraining just seems like a more fundamental operation. It feels more basic. It's rigid. There's not a lot of uncertainty in it. In RL, one turn can go longer, another can go shorter. There are no bounding boxes on it, kind of, so it's a little unpredictable.
 
-RL can also be massively parallel. But agent-style RL brings other things into the picture: environments, rollouts, actions, and tasks that can take different amounts of time. One run might finish quickly; another might need many more steps. There's more infrastructure to build and more variation in the work.
+Pretraining is just mechanical. Pick a million tokens, give them to the LLM, compute the error, compute the gradients, backpropagate. Give it another million random tokens, compute the error, backpropagate. You get the point. Pretraining is very mechanical and steady.
 
-Pretraining feels more basic to me. It's mechanical and steady. You have a clear target and a repeatable operation, and you can put a huge amount of compute into it.
+And as the scaling laws dictate, throw as much data, as much compute, and as many parameters as you can at it. Parameters are limited by the GPU, and compute is also limited by the GPU. So pretraining being such a mechanical, understandable task makes it simple, and it makes very efficient use of compute.
 
-That matters when the whole approach depends on scaling data, model capacity, and training compute. A regular workload makes it easier to use that compute efficiently.
+That's why I think next-token prediction is really good.
 
-Modern models don't stop at pretraining, of course. Post-training and RL matter too. But I now understand much better why next-token prediction is such a useful foundation: it gives us both a rich learning signal and a training process we can run at enormous scale.
+## Watch the whole thing
 
-## We need more of these explanations
+A lot of what these companies talk about now is safety, safety, safety. But for somebody who wants to understand the fundamentals, [that entire podcast](https://www.youtube.com/watch?v=Nlkk3glap_U) was genuinely gold. I'm not hyping it. It was just a good video. The Ilya quote is from the same video too.
 
-That interview was genuinely a good video. If you want to understand the fundamentals, I recommend [watching the whole conversation](https://www.youtube.com/watch?v=Nlkk3glap_U). The parts about scaling and language helped me understand something that had bothered me for a long time.
+The line about having to solve all these NLP problems and theory of mind problems just to predict the next token stuck with me, and that's why I'm writing this.
 
-A lot of the discussion I encounter from AI companies is about safety. That's important, but hearing someone explain the underlying ideas was what I needed. The line about having to solve math and theory-of-mind problems just to predict the next word is why I'm writing this post.
+Over the past few days I've started exploring more content made by people who actually work at these labs. I don't know if that's a progression on my end, or if people were more open earlier. Maybe I've just started exploring the right bubbles.
 
-Over the past few days, I've started exploring more content from people who actually work at these labs. Maybe that's a progression on my end. Maybe I've finally started looking in the right places. Either way, it's been valuable.
+But the point I want to drive home, and I don't know how to put it into words, is that as humanity, we need to share more with each other. The people working on these systems: I love that they're very transparent about it. This is how it should be, and they're doing the right thing.
 
-And it leaves me with one more thought: as humanity, we need to share more with each other.
+And if anyone feels pressure from their company not to share this stuff, they should know they are in the right. They're on the right side, not the other way around.
 
-I love it when people working on these systems are open about how they work. I think they're doing the right thing. If someone feels pressure from their company not to explain what they can about this technology, I think wanting to help people understand it is the right instinct.
-
-These systems are becoming too important for understanding them to stay inside a small bubble.
+That's all.

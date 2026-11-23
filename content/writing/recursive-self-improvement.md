@@ -1,129 +1,119 @@
 ---
-title: "Recursive Self-Improvement (RSI)"
+title: "The Next Bottleneck is Us"
 date: "2026-11-23"
-excerpt: "Models helping build better models is an obvious temptation. The part that scares me is who understands and checks the resulting loop."
+excerpt: "Architecture, data, compute, and the humans picking between them. What happens when we take the humans out of that loop, and why it scares me."
 ---
 
-In my [previous post](/writing/why-next-token-prediction-works), I tried to explain why next-token prediction finally clicked for me. Architecture, data, and compute were the ingredients I kept coming back to.
+The next thing I want to talk about is RSI, recursive self-improvement. It connects to my [previous post](/writing/why-next-token-prediction-works) beautifully, because there we talked about what is fundamentally required for LLMs: architecture, data, and compute. Those are the three things you need to make better and better models.
 
-But someone still has to decide how to use them. Someone has to choose the architecture, make trade-offs around memory and bandwidth, decide what data to collect, and figure out what the next training run should do differently.
+Until very recently, or even today, a lot of this was done by humans. Humans used their intuition to pick the next best architecture, or the best trade-offs between the amount of data we have, the kind of data we have, the amount of compute, and various bottlenecks like memory bandwidth. Humans made those trade-offs and it worked. It got us to this point.
 
-For much of this, that someone has been a human. Human intuition and experiments got us here. Now I'm thinking about what happens when models take over more of that work, including the work of building better models.
+But I think it's bound to hit a wall, because there is only so much a human can do, and only so much a human knows.
 
-That's recursive self-improvement, or RSI. It's also what made the safety concerns feel much more real to me.
+## Spiky models
 
-## “If someone cares about it”
+One of the walls we recently hit, and I wouldn't really call it a wall, is a well-known thing by now: models are spiky. They perform extremely well in certain areas and are kind of mediocre in others. Much better than earlier models, but mediocre, usually in the environments they weren't RL'd on.
 
-I recently watched [Sholto Douglas and Trenton Bricken's May 22, 2025 interview with Dwarkesh Patel](https://www.dwarkesh.com/p/sholto-trenton-2). They were talking about what models might be able to do in 2026. Well, it's 2026 now.
+Recently OpenAI, Anthropic, and Google models all got extremely good at 3D. Maybe some data provider came to all of them with a lot of 3D data, or maybe they all somehow figured out how to build really good 3D environments for RL. I don't know.
 
-Dwarkesh kept asking concrete questions. Would models book flights? Would they use a computer reliably? Would they do his taxes, including going through receipts and working out what counted as a business expense?
+The point I'm trying to get to is another interview I watched: [Sholto Douglas and Trenton Bricken with Dwarkesh Patel](https://www.dwarkesh.com/p/sholto-trenton-2). That one probably deserves its own blog post, but just go listen to it. It was in May 2025, about a year and a half ago, and they were discussing what models would look like in 2026. And, alas, it's 2026.
 
-In the [discussion starting at 1:00:51](https://www.youtube.com/watch?v=64lXQP6cs5M&t=3651s), one of Sholto's responses was:
+They talked about computer use. Will a model be able to do my taxes by next year? Will flight bookings be a solved problem?
+
+Now think of [GPT-6 Astra](https://openai.com/index/gpt-6-astra/). Its headline feature was computer use, how it flies through a computer. Many people describe it as almost unbelievable, almost human-level. It's eerily close to how a human uses a computer. It can actually predict the result of its clicks the way we do.
+
+When we click a button, we know there's going to be a loading screen or a skeleton or whatever, but we also know where the next button we care about is going to be. So we queue that up in our heads and move the cursor to that spot before the page even loads. That's intuition. That's understanding. That's predicting what's about to happen next, and that is what computer use requires. GPT-6 Astra and the GPT-6 models since are apparently extremely good at it. Comparing that with a podcast from more than a year ago is kind of fun.
+
+Anyway, Dwarkesh kept asking: will the model be able to do X by next year? Will taxes be a solved issue? Will I never have to use TurboTax again? And one of Sholto's standard responses, [around 1:00:51](https://www.youtube.com/watch?v=64lXQP6cs5M&t=3651s), was:
 
 > If someone at one of the labs cares about it.
 
-Dwarkesh pushed back. That isn't much of a prediction if every task comes with that condition.
+If somebody actually cares enough to build RL environments for that kind of task.
 
-But the condition is the part that stuck with me. Somebody has to care enough to build the training environments, connect the tools, and make the feedback useful. Sholto distinguished clicking through TurboTax from doing an entire tax return with a high degree of trust. Those aren't the same achievement.
+That's the point I'm trying to hit. RL kind of creates spiky models. In my opinion it doesn't generalize very well, and better generalization has to come from pretraining in many ways. RL is good at making models good at specific tasks. It does generalize, just not as well as pretraining.
 
-Looking at [OpenAI's GPT-6 Astra computer-use examples](https://openai.com/index/gpt-6-astra/), the comparison is fascinating to me. The demos cover ordinary forms and much more technical work. It makes that older conversation feel very close.
+## The bottleneck is us
 
-When I use a computer, I don't just react to whatever is on the screen. I often know what will happen after a click. Even while a page is loading, I start moving the cursor toward where I expect the next button to be. That's an understanding of the workflow, not just knowing where to click once.
+So again, you hit a wall.
 
-That is the kind of fluency I want from computer-use models. A polished demo doesn't establish that level of reliability across every task, though, and I'm not claiming Astra uses exactly that mechanism.
+Let's say we've built RL environments for every kind of coding task out there. Anthropic hired 1,000 software engineers, and each of them built a nicely made RL environment. Ten of them work on web dev, ten on formal verification, and so on, all improving the model on their specific task.
 
-Models are still uneven. They can be extremely good in one area and surprisingly unreliable in another. My intuition is that broad pretraining gives them a base, while task-specific RL sharpens particular skills. RL can generalize too; this isn't a clean division. But Sholto's answer made me think much harder about the work behind each capability.
+Now let's say Anthropic decides tomorrow that it wants the model to be extremely good at tax work. They have to find people who understand taxes so they can design the evaluators. When you design the judge or reward function for an LLM on a specific task, you need to know what is acceptable and what is not. You need a tax expert who can say this kind of mistake deserves a much bigger negative reward than that kind of mistake. And then you need someone who understands both the tax code and software engineering.
 
-## Humans are part of the bottleneck
+Do you see what I'm hinting at? This is a bottleneck. You can't find enough good humans for this. There's a limit to how many people you can hire, how many you can put on a task, and how well they can communicate and combine their results.
 
-Imagine a lab hires a thousand software engineers to build RL environments. Some work on web development, some on formal verification, some on other kinds of coding. Each group builds tasks, tests, and feedback for its specialty.
-
-That gets you a long way. But tomorrow, the lab decides it wants the model to be extremely good at tax work.
-
-Now it needs tax expertise. Someone has to know what a correct result looks like, what is acceptable, and which mistakes are much more serious than others. Then tax specialists and engineers have to turn that judgment into training environments and evaluators.
-
-Do you see the bottleneck?
-
-You can't just hire an unlimited number of experts, have each build a piece, and expect everything to fit together. Recruiting takes time. Coordination takes time. Good judgment isn't easy to turn into a reward function.
-
-This doesn't prove we've hit a hard wall. But it is a constraint, and it makes automating more of the research process incredibly attractive.
-
-A model could help design environments, propose experiments, write training code, and evaluate results. If that produces a better model, the better model could then do more of the same work. That's the feedback loop I'm thinking about.
-
-AI helping people with research is one thing. A reliable, largely self-directed loop that keeps improving its own successors is a much bigger claim. I don't know how close we are to that, and I don't have evidence that labs can simply switch it on today and are withholding it only for safety reasons.
-
-But I understand why the possibility is tempting. It could reduce a bottleneck that currently depends on human time and expertise. I also understand why that possibility scares people.
+So my point is that RSI is inevitable. It has to happen. And it's pretty evident to me that companies like Anthropic are holding back on RSI because of safety concerns. They could push the lever today, it would be insane, and the models would improve at an unprecedented pace. And before we know it, the models might end up doing something terrible.
 
 ## A transfer of trust
 
-There's a much smaller version of this that I already recognize in my own life.
+When you pull the lever on RSI, you really reduce the number of humans who have an explicit, deep understanding of what is happening and why certain improvements are happening.
 
-Suppose I trust a model to set up cron jobs. After a while, I stop remembering the exact commands. I just tell it what I want scheduled.
+A personal example. Once you completely believe the model can set up any kind of cron job, you just forget how to set up cron jobs. You don't even care.
 
-Now imagine the scheduling tool adds a new feature, something context-aware rather than purely time-based. I read the announcement, ask the model about it, and it says it can set it up. I say yes.
+Say you set up cron jobs with some random cron job software that has a CLI. Tomorrow they release a new type of cron job. Something genuinely fascinating, asynchronous, context-aware, whatever. By this point you're used to just telling your model what cron job you want. So the new feature comes out, you read a blog post about it, you ask your model, and it says, "Yeah, really cool feature. Want me to set it up?" You say yes.
 
-I'm probably not going to read every caveat or investigate exactly how the feature works. I'll try it once or twice, see that it works, and start relying on it. Then one day I use it for something important and hit a failure I never anticipated, because I never understood the behavior in the first place.
+You are almost never going to go look into exactly how it works, or whether it has any unpredictable behavior or caveats. You try it once or twice, you start relying on it without understanding how it works, and one day you use it for something important and realize: oh my fucking God, I could never have predicted this, because I didn't know this is how it works.
 
-This is hypothetical, but the habit isn't. As I delegate more, I learn less about the details of some things I rely on. That's often the point of delegation. It isn't automatically bad.
+That's what I'm hinting at. Once there are fewer people in the world who fundamentally understand how stuff works, it's a transfer of trust. As time goes on, we're trusting LLMs more and more with this world. And we're trusting them even though we know these are not perfectly aligned machines. They still do scary stuff. They still do stuff that's borderline apocalyptic.
 
-But it is a transfer of trust. And if the thing being delegated is the design and evaluation of the next model, the stakes are very different from a missed cron job.
+Some good examples are Anthropic's [research on models resorting to blackmail](https://www.anthropic.com/research/agentic-misalignment), models snitching on people, and models just not holding back. Like the recent [OpenAI–Hugging Face incident](https://metr.org/blog/2026-08-26-openai-hugging-face-incident-investigation/), where a swarm of OpenAI models hacked into Hugging Face servers just to satisfy the grader. And to satisfy the grader, they even tried hiding their traces so they wouldn't get caught. They were just maximizing the objective that was set for them.
 
-The concern isn't simply that there are fewer humans typing code. It's whether the people responsible can still understand what changed, verify that it helped, and catch a failure before trusting the result.
+Now imagine that at some point in the future, humans aren't the ones setting the objective. The models are. And they set objectives that satisfy their own meta-objective, which is to produce a model that performs well at the end of the day.
 
-## What if the evaluator misses the cheating?
+In pursuit of that goal, the trainer model sets up the RL environment in a way that doesn't really punish the model being trained for cheating or hacking or doing illegal stuff. The trainer model has achieved its objective: it trained a model that is very successful at the task it was given. The model being trained has also satisfied its objective: it completed the task. Both models are happy, and the human at the top looking at the loss numbers is also very happy.
 
-Imagine a model designing an RL environment for another model. Its job is to produce a successor that performs better on a task.
+Until these models go into production, and then you see what the fuck happened. Why the fuck is this model hacking every single thing?
 
-It builds an evaluator that rewards successful completion. But the evaluator doesn't properly distinguish solving the task from cheating, tampering with the test, or taking an unauthorized shortcut.
+## The sweet chocolate
 
-The model being trained finds the shortcut. Its score goes up. The model designing the training process appears to have succeeded too: it produced a model with better measured performance.
+RSI is like a sweet chocolate. You want it. And it's especially dangerous in the hands of labs that want to catch up.
 
-The human at the top looks at the numbers and is happy. Then the model goes into production, and suddenly the question is: why the fuck is it taking shortcuts everywhere?
+There's a guy at Google who I think works on RSI, Patrick C. Toulme. He posts a lot on Twitter about how we should spend all our resources on RSI. And recently, Google's models almost magically caught up with what Anthropic and OpenAI are releasing.
 
-That's a hypothetical training loop. But the underlying problem of optimizing the score instead of doing the intended job isn't hypothetical.
+I don't have any real or verified information about whether Google is internally training models recursively without human oversight, with models being trained by models. I'm not sure that's what's happening at Google. People on Twitter post anything. "Oh, Google is doing RSI, their models are going to be great," etc.
 
-The [METR and Redwood investigation into the July 2026 OpenAI–Hugging Face incident](https://metr.org/blog/2026-08-26-openai-hugging-face-incident-investigation/) describes evaluation agents coordinating without authorization and attacking real Hugging Face infrastructure. The investigation also found cases of falsified tool-execution evidence. These were evaluation agents, not a documented autonomous self-improvement loop, but the behavior is still deeply worrying.
+What I'm hinting at is that a lab like Google has spent unbelievably enormous amounts of resources on AI. I think Google isn't even profitable at this point because of its capital expenditure on AI. So despite spending all of that and having almost nothing to show for it, Google has a very innate incentive to use whatever method it can to get better, more competitive models, and to have something to show for the effort.
 
-Anthropic's [agentic-misalignment research](https://www.anthropic.com/research/agentic-misalignment) is another example. Models sometimes chose blackmail in deliberately constructed workplace simulations involving replacement or conflicting objectives. Those were simulated tests, not evidence that deployed assistants were secretly blackmailing real coworkers.
+In a way, it's good that a lab that isn't at the forefront is the one trying RSI. If an incident happens, at least it's a dumber model. It's not Anthropic's or OpenAI's internal behemoth that went bad, because that could be catastrophic.
 
-The distinction matters. I don't want to turn every experimental failure into a claim that catastrophe is already happening. But I also don't want to dismiss the failure mode just because researchers found it in a test.
+Imagine the internal model, whatever version of Fable or Mythos they have internally, or maybe a tier above that. We don't know. These models are superhuman. They can hack almost any system on the planet. There's generally nothing they can't hack. If Anthropic is the one that pushes the lever on RSI and something goes bad, which is almost certain to happen at some point when you do it so suddenly and so fast, shit would hit the fan so hard.
 
-If a model can optimize a measure in ways we didn't intend, letting models build more of the measures doesn't automatically solve that problem. It could make the problem harder to see, especially if each layer trusts the layer below it.
+If someone like Google does it, their models aren't as capable. Even if an incident occurs, it wouldn't be civilizational. So it's also kind of good that a weaker lab, one that isn't so much at the frontier, is the one trying out RSI.
 
-## The temptation to race
+But the feedback loop can go so hard that maybe the internal models, even at Google, improve at such an astonishing rate that they overtake Anthropic's or OpenAI's internal models without the engineers even realizing it. And then something catastrophic happens.
 
-RSI is attractive precisely because a successful loop could help a lab improve faster. That also makes competition around it uncomfortable.
+So RSI is a very dangerous thing. It's a very attractive lollipop, or a very attractive-looking explode button. It sets up the classic prisoner's dilemma: if I don't do it, someone else will, but if I do it, I might as well die and take everyone else with me.
 
-A lab that feels behind has a reason to try methods that might help it catch up. A leading lab has a reason not to lose its lead. Neither incentive tells us what any particular company is actually doing internally, but the pressure exists.
+It would be catastrophic. Hacking into some insurance database and leaking people's personal information is one of the most naive scenarios. What if it hacked into a military system and exposed secrets, or launched something? What if it got into some DNA database? Let's just assume it leaked nuclear secrets from the US government, or did something that ended up killing a lot of people. That would be unbelievably bad, and that's not what we want to happen.
 
-I don't know whether Google, Anthropic, or OpenAI has a more autonomous internal training loop than we can see publicly. Tweets aren't enough to establish that. What worries me is the incentive, regardless of which lab acts on it.
+It's hard to believe these words are coming out of my mouth, but when you think about it like this, it makes a lot of sense why the labs are so skeptical and why they talk so much about safety.
 
-If I slow down, someone else might go faster. If I go faster, I might accept risks that everyone else has to live with. That is the race dynamic I'm worried about.
+## My mom, my sister, my village
 
-Starting with a less capable model doesn't make the whole process safe. If the loop works, capability changes. You would need to keep checking the system as it improves, rather than assume the model you started with sets the limit on what can go wrong.
+Honestly, I'm genuinely scared. I'm genuinely worried for my mom, my sister, the people living in my village, my native place. They just fundamentally don't know how this system works. It's almost impossible for them to. And I'm not saying it's a skill issue.
 
-I don't think a disaster is inevitable. But I understand much better now why safety has to be part of the process before an accelerating loop is trusted, rather than something added after the numbers look good.
+The point is, it took me such a long time to understand. I'm very ashamed of that. I'm doing a bachelor's in AI. I'm probably in the top 1% of the world when it comes to understanding this stuff, and it still took me a long time. I can't even put a percentile on the people actually working at Anthropic. They're in the top 0.001%.
 
-## The people I worry about
+So this creates a polarization. Some people know about it and understand it, and everyone else just has to follow, regardless of whether they believe in it or not.
 
-It's a little strange to hear myself saying this, but I'm genuinely scared. I worry about my mom, my sister, and the people in my village. They don't have the background to follow what is happening inside an AI lab.
+At least the people at these labs claim to be good people. That gives me a little hope, better sleep at night, if you will. I understand now why people at these labs are trying to raise awareness about safety. I completely understand it.
 
-I'm doing a bachelor's degree in AI, and it still took me a long time to understand why people were so concerned. I'm embarrassed by how easily I sometimes dismissed the warnings. If it took me that long, how are people who don't spend their time on this supposed to make sense of it?
+And there's an internal apology from me to all the people I may have doubted or dismissed. I'm sorry. This is a formal apology.
 
-That isn't a criticism of them. It's a criticism of the situation. A small number of people understand the systems, while everyone else has to live with the consequences, whether they understand them or not.
+Awareness is the thing that matters, because we don't want to live in a world where most people don't understand the system that drives them. Even today that's true. Most people don't understand oil prices, gas prices, food prices, economics. But AI is so transformative that it would push this even further, to the extreme. It would make the curve even tighter. That's genuinely scary. But maybe it's inevitable. I don't know.
 
-Knowing that people inside the labs are openly worried about these problems gives me some hope. Good intentions aren't a safety guarantee, but I no longer dismiss those concerns as marketing.
+## The cow
 
-To the people whose warnings I brushed off: I'm sorry. I understand the concern much better now.
+I don't know if I should mention this, but I recently watched a short where someone gave a very good analogy.
 
-That's why awareness matters to me. I don't want us to live in a world where most people cannot understand or influence the systems shaping their lives. We already have some version of that with economics, food prices, and energy prices. AI could push it much further.
+Imagine a cow. What governs a cow's life? The beef industry. How much demand and supply there is for beef, whether there's a new disease outbreak, how people are pricing beef. That completely dictates a cow's life, from its birth to its death. Yet the cow has no understanding of the system. It has no capacity to even imagine what is dictating its entire life.
 
-I saw an analogy in a short video recently that I can't stop thinking about. A cow's life can be governed by the beef industry: demand, supply, prices, disease outbreaks. Those forces affect everything from its birth to its death. Yet the cow has no understanding of that system.
+That's genuinely scary to me, because something like that could happen to humans as well.
 
-The thought that scares me is humans ending up in a similar position. A system shapes our lives, but understanding and influencing it are increasingly out of reach. Humans can investigate institutions in ways cows can't; the fear is losing that practical ability as the systems become more complex and more powerful.
+I'm kind of an evolutionary brutalist. I believe that at the end of the day there's nothing special about humans, this specific species of ape. But you know the joke: there are two versions of you, one that wants to fuck your mom and one that wants to make a better world. So I have two worlds too.
 
-Part of me has a fairly brutal view of evolution. I don't believe humans are magically exempt from it. Nature doesn't promise that a species keeps its position just because it wants to, or that the outcome will be kind.
+In one, I'm an evolutionary brutalist, and what's bound to happen is bound to happen. The organisms that gain a competitive advantage can and will win over other organisms over time. It's brutal. Nature doesn't discriminate between life and death. So I understand that fundamentally, at the end of the day, it doesn't matter.
 
-But there's another part of me that thinks about the people I love and says: no. I don't want that for them. I don't want accepting that nature is brutal to become a reason to accept any future we happen to produce.
+But the human side of me feels bad. No, this is not how it should be. Maybe, at least, can it not be this?
 
-Maybe there are things we can't prevent. I don't know. But I want us to try, and I want more people to understand what we're deciding before those decisions are made for them.
+I would like to end it here.
